@@ -1,0 +1,100 @@
+schema_version: 4
+name: 09-sbml-nodes-coupled
+title: SBML reactors on a network — diffusive coupling synchronises
+created: '2026-10-22'
+status: completed
+investigation: dynamic-networks
+phase: Decide
+question: 'When a continuous SBML oscillator runs at every node and species diffuse along the edges, does
+  the network synchronise?
+
+  '
+hypothesis: 'Diffusive coupling of per-node Repressilators pulls their phases together, so the across-node
+  spread of a protein collapses toward zero — synchronisation.
+
+  '
+objective: 'Run the repressilator_network_coupled composite (SBML reactors + inter-node transport) and
+  measure across-node synchrony.
+
+  '
+description: 'With an SBML Repressilator at each node and protein diffusion along the edges, the coupled
+  oscillators synchronise — across-node concentration spread collapses.
+
+
+  Each node runs the Repressilator SBML model integrated by COPASI (reusing viva-copasi); the NetworkTransport
+  process diffuses proteins along edges. Reaction and diffusion are combined by operator splitting each
+  tick. See viz/ for the concentration-on-network animation and the per-node time series.
+
+  '
+claim: With an SBML Repressilator at each node and protein diffusion along the edges, the coupled oscillators
+  synchronise — across-node concentration spread collapses.
+confidence: Accepted
+parent_studies:
+- study: 02-preferential-attachment
+  relation: builds-on
+baseline:
+- name: baseline
+  composite: viva_dynamic_networks.composites.family_b.repressilator_network_coupled
+  params:
+    D: 0.3
+    n: 9.0
+    seed: 1.0
+visualizations:
+- name: concentration-on-network
+  address: local:NetworkEvolution
+  config:
+    title: SBML reactors on a network — diffusive coupling synchronises
+    layout: circular
+    color_by: species:PX
+    subtitle: a Repressilator at each node (viva-copasi); proteins diffuse along the ring
+    composite: viva_dynamic_networks.composites.family_b.repressilator_network_coupled
+    n_steps: 240
+    render_mode: end
+expected_behavior:
+- name: sync-collapses-spread
+  observable: sync_std
+  condition: across-node protein spread falls far below its initial value
+  rationale: Fickian coupling between limit-cycle oscillators entrains their phases.
+- name: still-oscillates
+  observable: mean_conc
+  condition: the mean protein level keeps oscillating (not a dead fixed point)
+  rationale: Synchronisation aligns phases; it does not quench the oscillation.
+behavior_tests:
+- name: coupled-synchronises
+  classification: quantitative
+  description: Final across-node PX spread is <25% of its initial value.
+  measure:
+    kind: flat
+    observable: sync_std
+    reduce: last
+  pass_if:
+    op: at_most
+    value: 0.25
+  units: ratio
+  requires_simulation: 'yes'
+  cites:
+  - colizza2007reaction
+  - elowitz2000repressilator
+bibliography:
+  bib_keys:
+  - colizza2007reaction
+  - pastorsatorras2015epidemic
+  - elowitz2000repressilator
+findings:
+- name: repressilator_network_coupled-result
+  summary: With an SBML Repressilator at each node and protein diffusion along the edges, the coupled
+    oscillators synchronise — across-node concentration spread collapses.
+  detail: 'Nine Repressilators, one per ring node, each integrated by COPASI (via viva-copasi) and coupled
+    by protein diffusion along the edges. Starting at different phases, the oscillators entrain: the across-node
+    PX spread collapses from its initial value toward zero while the mean keeps oscillating — reaction–diffusion
+    synchronisation on a network. This is the headline Family-B capability: continuous, multi-species
+    dynamics ON an evolving network with inter-node transport.'
+report:
+  verdict: With an SBML Repressilator at each node and protein diffusion along the edges, the coupled
+    oscillators synchronise — across-node concentration spread collapses.
+  verdict_status: passed
+  verdict_detail: 'Nine Repressilators, one per ring node, each integrated by COPASI (via viva-copasi)
+    and coupled by protein diffusion along the edges. Starting at different phases, the oscillators entrain:
+    the across-node PX spread collapses from its initial value toward zero while the mean keeps oscillating
+    — reaction–diffusion synchronisation on a network. This is the headline Family-B capability: continuous,
+    multi-species dynamics ON an evolving network with inter-node transport.'

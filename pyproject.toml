@@ -24,6 +24,8 @@ dependencies = [
     "networkx>=3.6.1",
     "imageio>=2.38.1",
     "pillow>=13.0.0",
+    "copasi-basico>=0.89",
+    "viva-copasi",
 ]
 
 [project.optional-dependencies]
@@ -51,3 +53,9 @@ packages = ["viva_dynamic_networks"]
 
 [tool.uv.sources]
 vivarium-workbench = { git = "https://github.com/vivarium-collective/vivarium-workbench.git", branch = "main" }
+viva-copasi = { path = "../viva-copasi", editable = true }
+
+[tool.pytest.ini_options]
+markers = [
+    "slow: longer-running tests (e.g. multi-period COPASI network runs)",
+]

@@ -111,8 +111,11 @@ def _node_colors(frame: Frame, color_by: str):
         return [STATE_COLORS.get(int(round(nodes[n].get("state", 0.0))), "#999")
                 for n in nodes], None
     if color_by == "birth":
-        vals = [float(nodes[n].get("birth", 0.0)) for n in nodes]
-        return vals, "birth"
+        return [float(nodes[n].get("birth", 0.0)) for n in nodes], "birth"
+    if color_by.startswith("species:"):
+        sid = color_by.split(":", 1)[1]
+        return [float((nodes[n].get("species") or {}).get(sid, 0.0))
+                for n in nodes], sid
     # default: degree
     deg = degree_sequence(nodes, edges)
     return [deg.get(n, 0) for n in nodes], "degree"
@@ -247,9 +250,14 @@ def render_gif(frames: List[Frame], positions: Pos, out_path, *, title: str = ""
                 ax.scatter(xs, ys, s=sizes, c=cols, edgecolors=SURFACE,
                            linewidths=0.8, zorder=2)
             else:
-                vals = ([float(nodes[n].get("birth", 0.0)) for n in ns]
-                        if color_by == "birth"
-                        else [deg.get(n, 0) for n in ns])
+                if color_by == "birth":
+                    vals = [float(nodes[n].get("birth", 0.0)) for n in ns]
+                elif color_by.startswith("species:"):
+                    sid = color_by.split(":", 1)[1]
+                    vals = [float((nodes[n].get("species") or {}).get(sid, 0.0))
+                            for n in ns]
+                else:
+                    vals = [deg.get(n, 0) for n in ns]
                 ax.scatter(xs, ys, s=sizes, c=vals, cmap="Blues",
                            vmin=0, edgecolors=SURFACE, linewidths=0.8, zorder=2)
         ax.set_xlim(-1.3, 1.3)
@@ -309,3 +317,41 @@ class NetworkEvolution(Visualization):
             color_by=self.config.get("color_by", "degree"),
             subtitle=self.config.get("subtitle", ""))
         return figure_to_html(fig)
+
+
+def concentration_timeseries_figure(frames: List[Frame], *, species: str = "PX",
+                                    title: str = "", subtitle: str = ""):
+    """Per-node concentration of ``species`` over time (shows (de)synchronisation).
+
+    Each faint line is one node; the bold line is the across-node mean. When
+    coupled reactors synchronise, the faint lines collapse onto the mean.
+    """
+    import numpy as np
+    import plotly.graph_objects as go
+
+    node_ids = sorted({n for f in frames for n in f["nodes"]},
+                      key=lambda x: (0, int(x)) if str(x).isdigit() else (1, x))
+    t = list(range(len(frames)))
+    fig = go.Figure()
+    series = {nid: [] for nid in node_ids}
+    for f in frames:
+        for nid in node_ids:
+            sp = (f["nodes"].get(nid, {}) or {}).get("species") or {}
+            series[nid].append(float(sp.get(species, float("nan"))))
+    for nid in node_ids:
+        fig.add_trace(go.Scatter(x=t, y=series[nid], mode="lines",
+                                 line=dict(width=1.0, color="rgba(42,120,214,0.33)"),
+                                 hoverinfo="skip", showlegend=False))
+    mean = np.nanmean(np.array([series[nid] for nid in node_ids]), axis=0)
+    fig.add_trace(go.Scatter(x=t, y=mean, mode="lines", name="across-node mean",
+                             line=dict(width=2.6, color="#0d366b")))
+    fig.update_layout(
+        title=dict(text=title + (f"<br><sup>{subtitle}</sup>" if subtitle else ""),
+                   font=dict(color=INK, size=18), x=0.02, xanchor="left"),
+        paper_bgcolor=SURFACE, plot_bgcolor=SURFACE, height=420,
+        margin=dict(l=60, r=20, t=70, b=50),
+        xaxis=dict(title="step", color=INK_MUTED, gridcolor="rgba(82,81,78,0.12)"),
+        yaxis=dict(title=f"{species} concentration", color=INK_MUTED,
+                   gridcolor="rgba(82,81,78,0.12)"),
+        legend=dict(font=dict(color=INK_MUTED), x=0.98, xanchor="right", y=0.98))
+    return fig

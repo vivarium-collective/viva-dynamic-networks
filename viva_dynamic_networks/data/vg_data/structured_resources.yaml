@@ -1,439 +1,496 @@
 name: structured_resources
 version: '1'
-description: >-
-  Curated catalog of dynamic-network rules for the viva-dynamic-networks
-  investigation. Two families: (A) network-rule — dynamics OF the network,
-  topology-reconfiguring rules implemented as process-bigraph reactions; and
-  (B) network-dynamics — dynamics ON the network, state evolving on nodes/edges
-  (the later SBML-at-nodes + inter-node transport studies). Each card cross-links
-  to the primary / review references folded into the References list below.
-
+description: 'Curated catalog of dynamic-network rules for the viva-dynamic-networks investigation. Two
+  families: (A) network-rule — dynamics OF the network, topology-reconfiguring rules implemented as process-bigraph
+  reactions; and (B) network-dynamics — dynamics ON the network, state evolving on nodes/edges (the later
+  SBML-at-nodes + inter-node transport studies). Each card cross-links to the primary / review references
+  folded into the References list below.'
 resources:
-
-# ===========================================================================
-# FAMILY A — network-rule : dynamics OF the network (topology reconfiguration)
-# These are the early-study modules. Each maps to a process-bigraph reaction
-# that rewrites the graph (add/remove nodes and edges) per step.
-# ===========================================================================
-
 - id: rule-erdos-renyi
   type: network-rule
   name: Erdős–Rényi random growth
   family: topology
-  summary: >-
-    Baseline null model. Edges appear (or vanish) uniformly at random,
-    independent of node identity or degree — no structure beyond chance.
-  rule: >-
-    At each step add/remove an edge between a uniformly random pair of nodes
-    with probability p (or add n nodes and wire each pair independently w.p. p).
-  key_params: [p (edge probability), n (nodes), growth_mode (static/accreting)]
+  summary: Baseline null model. Edges appear (or vanish) uniformly at random, independent of node identity
+    or degree — no structure beyond chance.
+  rule: At each step add/remove an edge between a uniformly random pair of nodes with probability p (or
+    add n nodes and wire each pair independently w.p. p).
+  key_params:
+  - p (edge probability)
+  - n (nodes)
+  - growth_mode (static/accreting)
   emergent: Poisson/binomial degree distribution; sharp giant-component percolation at <k>=1.
-  pbg_reaction: "reaction 'random_edge' picks two random node schema keys and sets an edge entry."
-  role_in_investigation: "Study 1 null baseline — the no-rule control every other rule is read against."
-  references: [erdos1960evolution, newman2003structure]
-
+  pbg_reaction: reaction 'random_edge' picks two random node schema keys and sets an edge entry.
+  role_in_investigation: Study 1 null baseline — the no-rule control every other rule is read against.
+  references:
+  - erdos1960evolution
+  - newman2003structure
 - id: rule-preferential-attachment
   type: network-rule
   name: Barabási–Albert preferential attachment
   family: topology
-  summary: >-
-    "Rich get richer" growth: arriving nodes link to existing nodes with
-    probability proportional to current degree, producing scale-free hubs.
-  rule: >-
-    Each step a new node arrives with m edges; it attaches to existing node i
-    with probability Π(i) = k_i / Σ_j k_j.
-  key_params: [m (edges per new node), n_final, seed_graph]
+  summary: '"Rich get richer" growth: arriving nodes link to existing nodes with probability proportional
+    to current degree, producing scale-free hubs.'
+  rule: Each step a new node arrives with m edges; it attaches to existing node i with probability Π(i)
+    = k_i / Σ_j k_j.
+  key_params:
+  - m (edges per new node)
+  - n_final
+  - seed_graph
   emergent: Power-law degree distribution P(k) ~ k^-3; a few dominant hubs.
-  pbg_reaction: "reaction 'attach_preferential' adds a node, samples m targets weighted by degree, writes edges."
-  role_in_investigation: "Study 2 — the canonical growth rule; visibly grows hubs on screen."
-  references: [barabasi1999emergence, albert2002statistical]
-
+  pbg_reaction: reaction 'attach_preferential' adds a node, samples m targets weighted by degree, writes
+    edges.
+  role_in_investigation: Study 2 — the canonical growth rule; visibly grows hubs on screen.
+  references:
+  - barabasi1999emergence
+  - albert2002statistical
 - id: rule-small-world-rewire
   type: network-rule
   name: Watts–Strogatz small-world rewiring
   family: topology
-  summary: >-
-    Interpolates regular lattice → random graph: start from a ring lattice and
-    rewire each edge at random with probability p, yielding high clustering with
-    short path lengths at intermediate p.
-  rule: >-
-    Begin with a k-regular ring lattice; for each edge, with probability p
-    move one endpoint to a uniformly random node (no self/multi-edges).
-  key_params: [k (lattice degree), p (rewiring probability), n]
+  summary: 'Interpolates regular lattice → random graph: start from a ring lattice and rewire each edge
+    at random with probability p, yielding high clustering with short path lengths at intermediate p.'
+  rule: Begin with a k-regular ring lattice; for each edge, with probability p move one endpoint to a
+    uniformly random node (no self/multi-edges).
+  key_params:
+  - k (lattice degree)
+  - p (rewiring probability)
+  - n
   emergent: Small-world regime — high clustering, low diameter — for 0 < p << 1.
-  pbg_reaction: "reaction 'rewire_edge' detaches one endpoint of an existing edge and reattaches at random w.p. p."
-  role_in_investigation: "Study 3 — watch a tidy ring dissolve into a small world as p sweeps up."
-  references: [watts1998smallworld, newman2003structure]
-
+  pbg_reaction: reaction 'rewire_edge' detaches one endpoint of an existing edge and reattaches at random
+    w.p. p.
+  role_in_investigation: Study 3 — watch a tidy ring dissolve into a small world as p sweeps up.
+  references:
+  - watts1998smallworld
+  - newman2003structure
 - id: rule-fitness-attachment
   type: network-rule
   name: Bianconi–Barabási fitness ("fit-get-richer")
   family: topology
-  summary: >-
-    Preferential attachment weighted by an intrinsic per-node fitness, so a
-    latecomer with high fitness can overtake older hubs — unlike pure BA.
-  rule: >-
-    New node attaches to i with probability Π(i) ∝ η_i · k_i, where η_i is a
-    fitness drawn from a fixed distribution ρ(η).
-  key_params: [m, fitness_distribution ρ(η), n_final]
+  summary: Preferential attachment weighted by an intrinsic per-node fitness, so a latecomer with high
+    fitness can overtake older hubs — unlike pure BA.
+  rule: New node attaches to i with probability Π(i) ∝ η_i · k_i, where η_i is a fitness drawn from a
+    fixed distribution ρ(η).
+  key_params:
+  - m
+  - fitness_distribution ρ(η)
+  - n_final
   emergent: Fitness-dependent scaling; possible "winner-takes-all" (condensation) regime.
-  pbg_reaction: "reaction 'attach_fitness' weights target sampling by η_i·k_i; η stored on node schema."
-  role_in_investigation: "Study 4 — contrast with BA: show a young high-fitness node climbing to hub status."
-  references: [bianconi2001competition, albert2002statistical]
-
+  pbg_reaction: reaction 'attach_fitness' weights target sampling by η_i·k_i; η stored on node schema.
+  role_in_investigation: 'Study 4 — contrast with BA: show a young high-fitness node climbing to hub status.'
+  references:
+  - bianconi2001competition
+  - albert2002statistical
 - id: rule-duplication-divergence
   type: network-rule
   name: Duplication–divergence (biological growth)
   family: topology
-  summary: >-
-    Genome-evolution analogue: a new node copies an existing node's edges, then
-    each copied edge is independently retained or dropped — reproduces observed
-    protein-interaction network topology.
-  rule: >-
-    Pick a random node u; add a duplicate v inheriting all of u's edges; retain
-    each inherited edge with probability q (optionally add a u–v link w.p. p).
-  key_params: [q (edge-retention probability), p (self-link probability), n_final]
-  emergent: "Power-law tail; non-self-averaging — identical params yield a wide family of networks."
-  pbg_reaction: "reaction 'duplicate_divergent' copies a node's edge set then prunes each copied edge w.p. 1-q."
-  role_in_investigation: "Study 5 — the biologically-motivated rule; bridges toward the SBML-at-nodes phase."
-  references: [vazquez2003modeling, ispolatov2005duplication]
-
+  summary: 'Genome-evolution analogue: a new node copies an existing node''s edges, then each copied edge
+    is independently retained or dropped — reproduces observed protein-interaction network topology.'
+  rule: Pick a random node u; add a duplicate v inheriting all of u's edges; retain each inherited edge
+    with probability q (optionally add a u–v link w.p. p).
+  key_params:
+  - q (edge-retention probability)
+  - p (self-link probability)
+  - n_final
+  emergent: Power-law tail; non-self-averaging — identical params yield a wide family of networks.
+  pbg_reaction: reaction 'duplicate_divergent' copies a node's edge set then prunes each copied edge w.p.
+    1-q.
+  role_in_investigation: Study 5 — the biologically-motivated rule; bridges toward the SBML-at-nodes phase.
+  references:
+  - vazquez2003modeling
+  - ispolatov2005duplication
 - id: rule-forest-fire
   type: network-rule
   name: Forest-fire growth (densification)
   family: topology
-  summary: >-
-    New nodes "burn" recursively outward from an anchor, linking to a random
-    subset of neighbors at each hop — the first generator to reproduce graph
-    densification and shrinking diameter over time.
-  rule: >-
-    New node picks an ambassador, links to it, then recursively links to a
-    geometrically-distributed sample of the ambassador's out/in-neighbors.
-  key_params: [p_forward, p_backward (burn probabilities), n_final]
+  summary: New nodes "burn" recursively outward from an anchor, linking to a random subset of neighbors
+    at each hop — the first generator to reproduce graph densification and shrinking diameter over time.
+  rule: New node picks an ambassador, links to it, then recursively links to a geometrically-distributed
+    sample of the ambassador's out/in-neighbors.
+  key_params:
+  - p_forward
+  - p_backward (burn probabilities)
+  - n_final
   emergent: Densification power law (edges super-linear in nodes); diameter shrinks as the graph grows.
-  pbg_reaction: "reaction 'forest_fire_attach' runs a bounded BFS burn from an anchor, writing edges to burned nodes."
-  role_in_investigation: "Study 6 — the time-evolution rule; densification is striking in the animation."
-  references: [leskovec2007graph]
-
+  pbg_reaction: reaction 'forest_fire_attach' runs a bounded BFS burn from an anchor, writing edges to
+    burned nodes.
+  role_in_investigation: Study 6 — the time-evolution rule; densification is striking in the animation.
+  references:
+  - leskovec2007graph
 - id: rule-adaptive-rewire
   type: network-rule
   name: Adaptive / coevolutionary rewiring
   family: topology
-  summary: >-
-    Topology and node state coevolve: nodes rewire their links in response to the
-    dynamics running on them (e.g. cut ties to "infected"/dissimilar neighbors,
-    form ties to similar ones) — the natural bridge between Family A and Family B.
-  rule: >-
-    Per step, with rate w a node drops an edge to a neighbor in a disfavored
-    state and reconnects to a random (or state-matched) node; node states update
-    by an on-network process (SIS, voter, …).
-  key_params: [w (rewiring rate), state_rule, matching_criterion]
-  emergent: "Self-organized topology, dynamic equilibria, bistability; small rule tweaks → drastic topology shifts."
-  pbg_reaction: "reaction 'adaptive_rewire' reads neighbor state, conditionally detaches + reattaches; couples to a Family-B node process."
-  role_in_investigation: "Study 7 — the coevolution capstone of Family A; explicitly links topology to on-node dynamics."
-  references: [gross2008adaptive]
-
+  summary: 'Topology and node state coevolve: nodes rewire their links in response to the dynamics running
+    on them (e.g. cut ties to "infected"/dissimilar neighbors, form ties to similar ones) — the natural
+    bridge between Family A and Family B.'
+  rule: Per step, with rate w a node drops an edge to a neighbor in a disfavored state and reconnects
+    to a random (or state-matched) node; node states update by an on-network process (SIS, voter, …).
+  key_params:
+  - w (rewiring rate)
+  - state_rule
+  - matching_criterion
+  emergent: Self-organized topology, dynamic equilibria, bistability; small rule tweaks → drastic topology
+    shifts.
+  pbg_reaction: reaction 'adaptive_rewire' reads neighbor state, conditionally detaches + reattaches;
+    couples to a Family-B node process.
+  role_in_investigation: Study 7 — the coevolution capstone of Family A; explicitly links topology to
+    on-node dynamics.
+  references:
+  - gross2008adaptive
 - id: rule-activity-driven
   type: network-rule
   name: Activity-driven temporal networks
   family: topology
-  summary: >-
-    Instead of a growing graph, a sequence of instantaneous contact graphs:
-    each node fires with its own activity rate and, when active, connects to a
-    few random others for one time window, then the edges vanish.
-  rule: >-
-    Each node i has activity a_i ∝ x_i (x_i ~ F(x)); per step i activates w.p.
-    a_i·Δt and creates m edges to random nodes; all edges reset next step.
-  key_params: [activity_distribution F(x), m (edges per active node), Δt]
-  emergent: Time-integrated degree reproduces the activity distribution; sets the stage for spreading on temporal graphs.
-  pbg_reaction: "reaction 'activity_fire' clears the edge set each step, then for each active node writes m random edges."
-  role_in_investigation: "Study 8 — temporal (blinking) networks; contrasts accreting vs. instantaneous topology."
-  references: [perra2012activity, holme2012temporal]
-
-# ===========================================================================
-# FAMILY B — network-dynamics : dynamics ON the network (state on nodes/edges)
-# Later studies. B2 is the template for the SBML-at-nodes + inter-node
-# transport/diffusion phase: a continuous multi-species reactor per node,
-# coupled by diffusion along edges.
-# ===========================================================================
-
+  summary: 'Instead of a growing graph, a sequence of instantaneous contact graphs: each node fires with
+    its own activity rate and, when active, connects to a few random others for one time window, then
+    the edges vanish.'
+  rule: Each node i has activity a_i ∝ x_i (x_i ~ F(x)); per step i activates w.p. a_i·Δt and creates
+    m edges to random nodes; all edges reset next step.
+  key_params:
+  - activity_distribution F(x)
+  - m (edges per active node)
+  - Δt
+  emergent: Time-integrated degree reproduces the activity distribution; sets the stage for spreading
+    on temporal graphs.
+  pbg_reaction: reaction 'activity_fire' clears the edge set each step, then for each active node writes
+    m random edges.
+  role_in_investigation: Study 8 — temporal (blinking) networks; contrasts accreting vs. instantaneous
+    topology.
+  references:
+  - perra2012activity
+  - holme2012temporal
 - id: dyn-sis-sir
   type: network-dynamics
   name: Epidemic spreading (SIS / SIR)
   family: on-network
-  summary: >-
-    Canonical contagion: each node is Susceptible/Infected(/Recovered); infection
-    transmits along edges, recovery is spontaneous — threshold behavior is set by
-    network topology (vanishing threshold on scale-free hubs).
-  rule: "S→I at rate β per infected neighbor; I→S (SIS) or I→R (SIR) at rate μ."
-  key_params: [β (infection rate), μ (recovery rate), patient_zero]
+  summary: 'Canonical contagion: each node is Susceptible/Infected(/Recovered); infection transmits along
+    edges, recovery is spontaneous — threshold behavior is set by network topology (vanishing threshold
+    on scale-free hubs).'
+  rule: S→I at rate β per infected neighbor; I→S (SIS) or I→R (SIR) at rate μ.
+  key_params:
+  - β (infection rate)
+  - μ (recovery rate)
+  - patient_zero
   node_state: discrete (S/I/R) — the entry point before continuous SBML states.
-  role_in_investigation: "Study 9 — simplest dynamics ON a (fixed or rule-grown) network; discrete node state."
-  references: [pastorsatorras2015epidemic]
-
+  role_in_investigation: Study 9 — simplest dynamics ON a (fixed or rule-grown) network; discrete node
+    state.
+  references:
+  - pastorsatorras2015epidemic
 - id: dyn-metapopulation-rd
   type: network-dynamics
   name: Reaction–diffusion metapopulation (SBML-at-nodes template)
   family: on-network
-  summary: >-
-    Each node is a well-mixed reactor holding continuous concentrations of
-    multiple species that react locally; species diffuse/transport between
-    connected nodes along edges. The template for the SBML-simulator-per-node phase.
-  rule: >-
-    Local: dX_i/dt = R(X_i) (node reaction network / SBML model). Coupling:
-    diffusive flux D·(X_j − X_i) along each edge (i,j), optionally scaled by edge weight.
-  key_params: [per-node reaction model (SBML), D (diffusion coefficients per species), edge weights]
+  summary: Each node is a well-mixed reactor holding continuous concentrations of multiple species that
+    react locally; species diffuse/transport between connected nodes along edges. The template for the
+    SBML-simulator-per-node phase.
+  rule: 'Local: dX_i/dt = R(X_i) (node reaction network / SBML model). Coupling: diffusive flux D·(X_j
+    − X_i) along each edge (i,j), optionally scaled by edge weight.'
+  key_params:
+  - per-node reaction model (SBML)
+  - D (diffusion coefficients per species)
+  - edge weights
   node_state: continuous, multi-species (an SBML model instance per node).
-  pbg_reaction: "topology set by a Family-A rule; each node runs an SBML Process; a transport Process moves species across edges."
-  role_in_investigation: "Study 10+ — the headline later phase: continuous multi-species dynamics ON an evolving network with inter-node transport."
-  references: [colizza2007reaction, pastorsatorras2015epidemic]
-
+  pbg_reaction: topology set by a Family-A rule; each node runs an SBML Process; a transport Process moves
+    species across edges.
+  role_in_investigation: 'Study 10+ — the headline later phase: continuous multi-species dynamics ON an
+    evolving network with inter-node transport.'
+  references:
+  - colizza2007reaction
+  - pastorsatorras2015epidemic
+  - elowitz2000repressilator
 - id: dyn-kuramoto
   type: network-dynamics
   name: Kuramoto synchronization
   family: on-network
-  summary: >-
-    Each node is a phase oscillator with its own natural frequency, pulled toward
-    its neighbors' phases; the network undergoes a transition to collective
-    synchrony as coupling increases — topology shapes the transition.
-  rule: "dθ_i/dt = ω_i + (K/k_i)·Σ_{j∈N(i)} sin(θ_j − θ_i)."
-  key_params: [K (coupling strength), ω distribution, topology]
+  summary: Each node is a phase oscillator with its own natural frequency, pulled toward its neighbors'
+    phases; the network undergoes a transition to collective synchrony as coupling increases — topology
+    shapes the transition.
+  rule: dθ_i/dt = ω_i + (K/k_i)·Σ_{j∈N(i)} sin(θ_j − θ_i).
+  key_params:
+  - K (coupling strength)
+  - ω distribution
+  - topology
   node_state: continuous scalar (phase) — a gentle continuous-dynamics example.
-  role_in_investigation: "Optional on-network study — a visually compelling continuous example (phases locking)."
-  references: [rodrigues2016kuramoto, acebron2005kuramoto]
-
+  role_in_investigation: Optional on-network study — a visually compelling continuous example (phases
+    locking).
+  references:
+  - rodrigues2016kuramoto
+  - acebron2005kuramoto
 - id: dyn-voter-consensus
   type: network-dynamics
   name: Voter / consensus dynamics
   family: on-network
-  summary: >-
-    Opinion dynamics: a random node copies the state of a random neighbor;
-    network structure governs whether the system reaches consensus and how fast.
-  rule: "Pick node i and neighbor j at random; set state(i) ← state(j)."
-  key_params: [n_opinions, update_scheme (node/edge/link), topology]
+  summary: 'Opinion dynamics: a random node copies the state of a random neighbor; network structure governs
+    whether the system reaches consensus and how fast.'
+  rule: Pick node i and neighbor j at random; set state(i) ← state(j).
+  key_params:
+  - n_opinions
+  - update_scheme (node/edge/link)
+  - topology
   node_state: discrete opinion label.
-  role_in_investigation: "Optional on-network study — pairs naturally with adaptive rewiring (Family A coevolution)."
-  references: [castellano2009statistical, gross2008adaptive]
-
-# ===========================================================================
-# paper-reference : citation targets (folded into the unified References list;
-# resolved from every `references: [<id>]` above)
-# ===========================================================================
-
+  role_in_investigation: Optional on-network study — pairs naturally with adaptive rewiring (Family A
+    coevolution).
+  references:
+  - castellano2009statistical
+  - gross2008adaptive
 - id: erdos1960evolution
   type: paper-reference
-  name: "Erdős & Rényi 1960"
+  name: Erdős & Rényi 1960
   summary: Foundational random-graph growth; percolation of the giant component.
-  authors: "Erdős P, Rényi A"
+  authors: Erdős P, Rényi A
   year: 1960
-  title: "On the evolution of random graphs"
-  venue: "Publ. Math. Inst. Hung. Acad. Sci. 5:17–60"
-  tags: [random-graph, baseline]
-
+  title: On the evolution of random graphs
+  venue: Publ. Math. Inst. Hung. Acad. Sci. 5:17–60
+  tags:
+  - random-graph
+  - baseline
 - id: watts1998smallworld
   type: paper-reference
-  name: "Watts & Strogatz 1998"
+  name: Watts & Strogatz 1998
   summary: Small-world networks via random rewiring of a lattice.
-  authors: "Watts DJ, Strogatz SH"
+  authors: Watts DJ, Strogatz SH
   year: 1998
-  title: "Collective dynamics of 'small-world' networks"
-  venue: "Nature 393:440–442"
-  doi: "10.1038/30918"
-  tags: [small-world, rewiring]
-
+  title: Collective dynamics of 'small-world' networks
+  venue: Nature 393:440–442
+  doi: 10.1038/30918
+  tags:
+  - small-world
+  - rewiring
 - id: barabasi1999emergence
   type: paper-reference
-  name: "Barabási & Albert 1999"
+  name: Barabási & Albert 1999
   summary: Preferential attachment and the emergence of scale-free networks.
-  authors: "Barabási A-L, Albert R"
+  authors: Barabási A-L, Albert R
   year: 1999
-  title: "Emergence of scaling in random networks"
-  venue: "Science 286:509–512"
-  doi: "10.1126/science.286.5439.509"
-  tags: [preferential-attachment, scale-free]
-
+  title: Emergence of scaling in random networks
+  venue: Science 286:509–512
+  doi: 10.1126/science.286.5439.509
+  tags:
+  - preferential-attachment
+  - scale-free
 - id: albert2002statistical
   type: paper-reference
-  name: "Albert & Barabási 2002 (review)"
+  name: Albert & Barabási 2002 (review)
   summary: Statistical-mechanics review of complex-network models, incl. growth rules.
-  authors: "Albert R, Barabási A-L"
+  authors: Albert R, Barabási A-L
   year: 2002
-  title: "Statistical mechanics of complex networks"
-  venue: "Rev. Mod. Phys. 74:47–97"
-  doi: "10.1103/RevModPhys.74.47"
-  tags: [review, growth-models]
-
+  title: Statistical mechanics of complex networks
+  venue: Rev. Mod. Phys. 74:47–97
+  doi: 10.1103/RevModPhys.74.47
+  tags:
+  - review
+  - growth-models
 - id: newman2003structure
   type: paper-reference
-  name: "Newman 2003 (review)"
+  name: Newman 2003 (review)
   summary: Broad review of complex-network structure and function.
-  authors: "Newman MEJ"
+  authors: Newman MEJ
   year: 2003
-  title: "The structure and function of complex networks"
-  venue: "SIAM Review 45:167–256"
-  doi: "10.1137/S003614450342480"
-  tags: [review, structure]
-
+  title: The structure and function of complex networks
+  venue: SIAM Review 45:167–256
+  doi: 10.1137/S003614450342480
+  tags:
+  - review
+  - structure
 - id: boccaletti2006complex
   type: paper-reference
-  name: "Boccaletti et al. 2006 (review)"
+  name: Boccaletti et al. 2006 (review)
   summary: Physics Reports review of network structure and dynamics.
-  authors: "Boccaletti S, Latora V, Moreno Y, Chavez M, Hwang D-U"
+  authors: Boccaletti S, Latora V, Moreno Y, Chavez M, Hwang D-U
   year: 2006
-  title: "Complex networks: Structure and dynamics"
-  venue: "Physics Reports 424:175–308"
-  doi: "10.1016/j.physrep.2005.10.009"
-  tags: [review, dynamics]
-
+  title: 'Complex networks: Structure and dynamics'
+  venue: Physics Reports 424:175–308
+  doi: 10.1016/j.physrep.2005.10.009
+  tags:
+  - review
+  - dynamics
 - id: bianconi2001competition
   type: paper-reference
-  name: "Bianconi & Barabási 2001"
+  name: Bianconi & Barabási 2001
   summary: Fitness model — intrinsic node fitness modulates preferential attachment.
-  authors: "Bianconi G, Barabási A-L"
+  authors: Bianconi G, Barabási A-L
   year: 2001
-  title: "Competition and multiscaling in evolving networks"
-  venue: "Europhys. Lett. 54:436–442"
-  doi: "10.1209/epl/i2001-00260-6"
-  tags: [fitness, growth]
-
+  title: Competition and multiscaling in evolving networks
+  venue: Europhys. Lett. 54:436–442
+  doi: 10.1209/epl/i2001-00260-6
+  tags:
+  - fitness
+  - growth
 - id: vazquez2003modeling
   type: paper-reference
-  name: "Vázquez et al. 2003"
+  name: Vázquez et al. 2003
   summary: Duplication-divergence model of protein-interaction network growth.
-  authors: "Vázquez A, Flammini A, Maritan A, Vespignani A"
+  authors: Vázquez A, Flammini A, Maritan A, Vespignani A
   year: 2003
-  title: "Modeling of protein interaction networks"
-  venue: "ComPlexUs 1:38–44"
-  tags: [duplication-divergence, biological]
-
+  title: Modeling of protein interaction networks
+  venue: ComPlexUs 1:38–44
+  tags:
+  - duplication-divergence
+  - biological
 - id: ispolatov2005duplication
   type: paper-reference
-  name: "Ispolatov et al. 2005"
+  name: Ispolatov et al. 2005
   summary: Duplication-divergence analysis; non-self-averaging growth.
-  authors: "Ispolatov I, Krapivsky PL, Yuryev A"
+  authors: Ispolatov I, Krapivsky PL, Yuryev A
   year: 2005
-  title: "Duplication-divergence model of protein interaction network"
-  venue: "Phys. Rev. E 71:061911"
-  doi: "10.1103/PhysRevE.71.061911"
-  tags: [duplication-divergence, biological]
-
+  title: Duplication-divergence model of protein interaction network
+  venue: Phys. Rev. E 71:061911
+  doi: 10.1103/PhysRevE.71.061911
+  tags:
+  - duplication-divergence
+  - biological
 - id: leskovec2007graph
   type: paper-reference
-  name: "Leskovec, Kleinberg & Faloutsos 2007"
+  name: Leskovec, Kleinberg & Faloutsos 2007
   summary: Forest-fire model; graph densification and shrinking diameters.
-  authors: "Leskovec J, Kleinberg J, Faloutsos C"
+  authors: Leskovec J, Kleinberg J, Faloutsos C
   year: 2007
-  title: "Graph evolution: Densification and shrinking diameters"
-  venue: "ACM Trans. Knowl. Discov. Data 1(1):2"
-  doi: "10.1145/1217299.1217301"
-  tags: [forest-fire, densification, temporal]
-
+  title: 'Graph evolution: Densification and shrinking diameters'
+  venue: ACM Trans. Knowl. Discov. Data 1(1):2
+  doi: 10.1145/1217299.1217301
+  tags:
+  - forest-fire
+  - densification
+  - temporal
 - id: gross2008adaptive
   type: paper-reference
-  name: "Gross & Blasius 2008 (review)"
+  name: Gross & Blasius 2008 (review)
   summary: Review of adaptive coevolutionary networks (topology ↔ node dynamics).
-  authors: "Gross T, Blasius B"
+  authors: Gross T, Blasius B
   year: 2008
-  title: "Adaptive coevolutionary networks: a review"
-  venue: "J. R. Soc. Interface 5:259–271"
-  doi: "10.1098/rsif.2007.1229"
-  tags: [review, adaptive, coevolution]
-
+  title: 'Adaptive coevolutionary networks: a review'
+  venue: J. R. Soc. Interface 5:259–271
+  doi: 10.1098/rsif.2007.1229
+  tags:
+  - review
+  - adaptive
+  - coevolution
 - id: holme2012temporal
   type: paper-reference
-  name: "Holme & Saramäki 2012 (review)"
+  name: Holme & Saramäki 2012 (review)
   summary: Foundational review of temporal networks.
-  authors: "Holme P, Saramäki J"
+  authors: Holme P, Saramäki J
   year: 2012
-  title: "Temporal networks"
-  venue: "Physics Reports 519:97–125"
-  doi: "10.1016/j.physrep.2012.03.001"
-  tags: [review, temporal]
-
+  title: Temporal networks
+  venue: Physics Reports 519:97–125
+  doi: 10.1016/j.physrep.2012.03.001
+  tags:
+  - review
+  - temporal
 - id: perra2012activity
   type: paper-reference
-  name: "Perra et al. 2012"
+  name: Perra et al. 2012
   summary: Activity-driven generative model of time-varying networks.
-  authors: "Perra N, Gonçalves B, Pastor-Satorras R, Vespignani A"
+  authors: Perra N, Gonçalves B, Pastor-Satorras R, Vespignani A
   year: 2012
-  title: "Activity driven modeling of time varying networks"
-  venue: "Scientific Reports 2:469"
-  doi: "10.1038/srep00469"
-  tags: [temporal, activity-driven]
-
+  title: Activity driven modeling of time varying networks
+  venue: Scientific Reports 2:469
+  doi: 10.1038/srep00469
+  tags:
+  - temporal
+  - activity-driven
 - id: colizza2007reaction
   type: paper-reference
-  name: "Colizza, Pastor-Satorras & Vespignani 2007"
+  name: Colizza, Pastor-Satorras & Vespignani 2007
   summary: Reaction–diffusion and metapopulation processes on heterogeneous networks.
-  authors: "Colizza V, Pastor-Satorras R, Vespignani A"
+  authors: Colizza V, Pastor-Satorras R, Vespignani A
   year: 2007
-  title: "Reaction–diffusion processes and metapopulation models in heterogeneous networks"
-  venue: "Nature Physics 3:276–282"
-  doi: "10.1038/nphys560"
-  tags: [reaction-diffusion, metapopulation, transport]
-
+  title: Reaction–diffusion processes and metapopulation models in heterogeneous networks
+  venue: Nature Physics 3:276–282
+  doi: 10.1038/nphys560
+  tags:
+  - reaction-diffusion
+  - metapopulation
+  - transport
 - id: pastorsatorras2015epidemic
   type: paper-reference
-  name: "Pastor-Satorras et al. 2015 (review)"
+  name: Pastor-Satorras et al. 2015 (review)
   summary: Comprehensive review of epidemic/contagion processes on networks.
-  authors: "Pastor-Satorras R, Castellano C, Van Mieghem P, Vespignani A"
+  authors: Pastor-Satorras R, Castellano C, Van Mieghem P, Vespignani A
   year: 2015
-  title: "Epidemic processes in complex networks"
-  venue: "Rev. Mod. Phys. 87:925–979"
-  doi: "10.1103/RevModPhys.87.925"
-  tags: [review, epidemic, on-network]
-
+  title: Epidemic processes in complex networks
+  venue: Rev. Mod. Phys. 87:925–979
+  doi: 10.1103/RevModPhys.87.925
+  tags:
+  - review
+  - epidemic
+  - on-network
 - id: rodrigues2016kuramoto
   type: paper-reference
-  name: "Rodrigues et al. 2016 (review)"
+  name: Rodrigues et al. 2016 (review)
   summary: Review of the Kuramoto synchronization model on complex networks.
-  authors: "Rodrigues FA, Peron TKDM, Ji P, Kurths J"
+  authors: Rodrigues FA, Peron TKDM, Ji P, Kurths J
   year: 2016
-  title: "The Kuramoto model in complex networks"
-  venue: "Physics Reports 610:1–98"
-  doi: "10.1016/j.physrep.2015.10.008"
-  tags: [review, synchronization, kuramoto]
-
+  title: The Kuramoto model in complex networks
+  venue: Physics Reports 610:1–98
+  doi: 10.1016/j.physrep.2015.10.008
+  tags:
+  - review
+  - synchronization
+  - kuramoto
 - id: acebron2005kuramoto
   type: paper-reference
-  name: "Acebrón et al. 2005 (review)"
+  name: Acebrón et al. 2005 (review)
   summary: Classic review of the Kuramoto model as a synchronization paradigm.
-  authors: "Acebrón JA, Bonilla LL, Pérez Vicente CJ, Ritort F, Spigler R"
+  authors: Acebrón JA, Bonilla LL, Pérez Vicente CJ, Ritort F, Spigler R
   year: 2005
-  title: "The Kuramoto model: A simple paradigm for synchronization phenomena"
-  venue: "Rev. Mod. Phys. 77:137–185"
-  doi: "10.1103/RevModPhys.77.137"
-  tags: [review, synchronization, kuramoto]
-
+  title: 'The Kuramoto model: A simple paradigm for synchronization phenomena'
+  venue: Rev. Mod. Phys. 77:137–185
+  doi: 10.1103/RevModPhys.77.137
+  tags:
+  - review
+  - synchronization
+  - kuramoto
 - id: castellano2009statistical
   type: paper-reference
-  name: "Castellano, Fortunato & Loreto 2009 (review)"
+  name: Castellano, Fortunato & Loreto 2009 (review)
   summary: Review of social/opinion dynamics incl. the voter model on networks.
-  authors: "Castellano C, Fortunato S, Loreto V"
+  authors: Castellano C, Fortunato S, Loreto V
   year: 2009
-  title: "Statistical physics of social dynamics"
-  venue: "Rev. Mod. Phys. 81:591–646"
-  doi: "10.1103/RevModPhys.81.591"
-  tags: [review, voter, opinion-dynamics]
-
+  title: Statistical physics of social dynamics
+  venue: Rev. Mod. Phys. 81:591–646
+  doi: 10.1103/RevModPhys.81.591
+  tags:
+  - review
+  - voter
+  - opinion-dynamics
 - id: rossetti2018community
   type: paper-reference
-  name: "Rossetti & Cazabet 2018 (survey)"
+  name: Rossetti & Cazabet 2018 (survey)
   summary: Survey of community discovery in dynamic/evolving networks.
-  authors: "Rossetti G, Cazabet R"
+  authors: Rossetti G, Cazabet R
   year: 2018
-  title: "Community discovery in dynamic networks: A survey"
-  venue: "ACM Computing Surveys 51(2):35"
-  doi: "10.1145/3172867"
-  tags: [survey, community, dynamic]
-
+  title: 'Community discovery in dynamic networks: A survey'
+  venue: ACM Computing Surveys 51(2):35
+  doi: 10.1145/3172867
+  tags:
+  - survey
+  - community
+  - dynamic
 - id: yang2011detecting
   type: paper-reference
-  name: "Yang et al. 2011"
+  name: Yang et al. 2011
   summary: Dynamic stochastic block model; community evolution via transition matrix.
-  authors: "Yang T, Chi Y, Zhu S, Gong Y, Jin R"
+  authors: Yang T, Chi Y, Zhu S, Gong Y, Jin R
   year: 2011
-  title: "Detecting communities and their evolutions in dynamic social networks—a Bayesian approach"
-  venue: "Machine Learning 82:157–189"
-  doi: "10.1007/s10994-010-5214-7"
-  tags: [dynamic-SBM, community]
+  title: Detecting communities and their evolutions in dynamic social networks—a Bayesian approach
+  venue: Machine Learning 82:157–189
+  doi: 10.1007/s10994-010-5214-7
+  tags:
+  - dynamic-SBM
+  - community
+- id: elowitz2000repressilator
+  type: paper-reference
+  name: Elowitz & Leibler 2000
+  summary: The repressilator — a synthetic genetic oscillator (the SBML model placed at each node in Family
+    B).
+  authors: Elowitz MB, Leibler S
+  year: 2000
+  title: A synthetic oscillatory network of transcriptional regulators
+  venue: Nature 403:335–338
+  doi: 10.1038/35002125
+  tags:
+  - synthetic-biology
+  - oscillator
+  - sbml

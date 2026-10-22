@@ -109,3 +109,90 @@ def _find_workspace_root(start: Path) -> Path:
             break
         node = node.parent
     return start
+
+
+def run_sbml_study(
+    *,
+    generator: str,
+    params: dict,
+    duration: float,
+    study_dir,
+    title: str,
+    species: str = "PX",
+    layout: str = "circular",
+    subtitle: str = "",
+    gif_stride: int = 2,
+) -> dict:
+    """Run a Family-B (SBML-at-nodes) study end-to-end; return sync metrics.
+
+    Renders the concentration-on-network GIF + interactive animation and the
+    per-node concentration time-series into the study's ``viz/`` dir, records the
+    run, and returns across-node synchrony metrics for the behavior checks.
+    """
+    import numpy as np
+
+    study_dir = Path(study_dir).resolve()
+    workspace_root = _find_workspace_root(study_dir)
+    spec_id = f"viva_dynamic_networks.composites.family_b.{generator}"
+    study_slug = study_dir.name
+
+    run_id = uuid.uuid4().hex
+    _record(workspace_root, {
+        "run_id": run_id, "event": "started", "spec_id": spec_id,
+        "label": study_slug, "started_at": time.time(), "status": "running",
+        "n_steps": duration, "emitter": "ram", "origin": "canonical_run",
+        "study_slug": study_slug, "investigation_slug": INVESTIGATION_SLUG,
+        "params": params,
+    })
+    try:
+        core = build_core()
+        gen = getattr(_composites, generator)
+        doc = gen(core, **params)
+        sim = Composite({"state": doc}, core=core)
+        sim.run(float(duration))
+        rows = gather_emitter_results(sim)[("emitter",)]
+        frames = viz.frames_from_rows(rows)
+
+        def across_node(frame):
+            return np.array([float((n.get("species") or {}).get(species, 0.0))
+                             for n in frame["nodes"].values()])
+
+        # Synchrony as the across-node spread averaged over the first vs last
+        # third of the run (robust to the instantaneous oscillation phase).
+        std_series = [float(across_node(f).std()) for f in frames]
+        mean_series = [float(across_node(f).mean()) for f in frames]
+        amplitude = float(max(mean_series) - min(mean_series))
+        third = max(1, len(frames) // 3)
+        early_std = float(np.mean(std_series[:third]))
+        late_std = float(np.mean(std_series[-third:]))
+        init_std = early_std
+        final_std = late_std
+
+        viz_dir = study_dir / "viz"
+        viz_dir.mkdir(parents=True, exist_ok=True)
+        positions = viz.compute_positions(frames, kind=layout)
+        gif_frames = frames[::max(1, gif_stride)]
+        viz.render_gif(gif_frames, positions, viz_dir / f"{generator}.gif",
+                       title=title, color_by=f"species:{species}", fps=6)
+        net_html = viz.figure_to_html(viz.evolution_figure(
+            frames, positions, title=title, color_by=f"species:{species}",
+            subtitle=subtitle))
+        (viz_dir / f"{generator}.html").write_text(net_html, encoding="utf-8")
+        ts_html = viz.figure_to_html(viz.concentration_timeseries_figure(
+            frames, species=species, title=f"{title} — {species} across nodes",
+            subtitle=subtitle))
+        (viz_dir / f"{generator}_timeseries.html").write_text(ts_html, encoding="utf-8")
+    except Exception:
+        _record(workspace_root, {
+            "run_id": run_id, "event": "completed", "completed_at": time.time(),
+            "n_steps": 0, "status": "failed"})
+        raise
+
+    _record(workspace_root, {
+        "run_id": run_id, "event": "completed", "completed_at": time.time(),
+        "n_steps": duration, "status": "completed"})
+    return {
+        "early_std": early_std, "late_std": late_std,
+        "sync_ratio": late_std / early_std if early_std > 1e-9 else None,
+        "amplitude": amplitude, "n_frames": len(frames),
+    }

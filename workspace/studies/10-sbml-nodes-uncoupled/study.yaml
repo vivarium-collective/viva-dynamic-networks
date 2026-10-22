@@ -1,0 +1,92 @@
+schema_version: 4
+name: 10-sbml-nodes-uncoupled
+title: SBML reactors on a network — uncoupled control (no diffusion)
+created: '2026-10-22'
+status: completed
+investigation: dynamic-networks
+phase: Decide
+question: 'With diffusion switched off, do the per-node oscillators stay out of phase?
+
+  '
+hypothesis: 'Without inter-node transport each Repressilator runs independently, so nodes seeded at different
+  phases never synchronise and the across-node spread stays large.
+
+  '
+objective: 'Run the repressilator_network_uncoupled composite (SBML reactors + inter-node transport) and
+  measure across-node synchrony.
+
+  '
+description: 'With diffusion off, the per-node oscillators remain independent and out of phase — the control
+  that isolates coupling as the cause of synchronisation in study 09.
+
+
+  Each node runs the Repressilator SBML model integrated by COPASI (reusing viva-copasi); the NetworkTransport
+  process diffuses proteins along edges. Reaction and diffusion are combined by operator splitting each
+  tick. See viz/ for the concentration-on-network animation and the per-node time series.
+
+  '
+claim: With diffusion off, the per-node oscillators remain independent and out of phase — the control
+  that isolates coupling as the cause of synchronisation in study 09.
+confidence: Accepted
+parent_studies:
+- study: 09-sbml-nodes-coupled
+  relation: alternative-to
+baseline:
+- name: baseline
+  composite: viva_dynamic_networks.composites.family_b.repressilator_network_uncoupled
+  params:
+    n: 9.0
+    seed: 1.0
+visualizations:
+- name: concentration-on-network
+  address: local:NetworkEvolution
+  config:
+    title: SBML reactors on a network — uncoupled control (no diffusion)
+    layout: circular
+    color_by: species:PX
+    subtitle: identical Repressilator nodes with diffusion off (D=0) — the control
+    composite: viva_dynamic_networks.composites.family_b.repressilator_network_uncoupled
+    n_steps: 240
+    render_mode: end
+expected_behavior:
+- name: stays-desynchronised
+  observable: sync_std
+  condition: across-node spread does not collapse
+  rationale: Uncoupled oscillators retain their initial phase differences.
+behavior_tests:
+- name: uncoupled-stays-spread
+  classification: quantitative
+  description: Final across-node PX spread stays well above the coupled case (ratio not collapsed).
+  measure:
+    kind: flat
+    observable: sync_std
+    reduce: last
+  pass_if:
+    op: at_least
+    value: 3.0
+  units: concentration
+  requires_simulation: 'yes'
+  cites:
+  - elowitz2000repressilator
+bibliography:
+  bib_keys:
+  - elowitz2000repressilator
+  - colizza2007reaction
+findings:
+- name: repressilator_network_uncoupled-result
+  summary: With diffusion off, the per-node oscillators remain independent and out of phase — the control
+    that isolates coupling as the cause of synchronisation in study 09.
+  detail: 'The same ring of Repressilators with diffusion disabled (D=0). Seeded at different phases,
+    the nodes relax onto the common limit cycle (so the across-node spread dips from its initial transient
+    value) but never phase-lock: a substantial spread persists (late across-node PX std ≈ 50), in sharp
+    contrast to the coupled case where it collapses to ≈0. This control confirms the synchronisation in
+    study 09 is caused by inter-node transport, not by the shared model.'
+report:
+  verdict: With diffusion off, the per-node oscillators remain independent and out of phase — the control
+    that isolates coupling as the cause of synchronisation in study 09.
+  verdict_status: passed
+  verdict_detail: 'The same ring of Repressilators with diffusion disabled (D=0). Seeded at different
+    phases, the nodes relax onto the common limit cycle (so the across-node spread dips from its initial
+    transient value) but never phase-lock: a substantial spread persists (late across-node PX std ≈ 50),
+    in sharp contrast to the coupled case where it collapses to ≈0. This control confirms the synchronisation
+    in study 09 is caused by inter-node transport, not by the shared model.'

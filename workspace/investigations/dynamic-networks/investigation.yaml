@@ -32,17 +32,21 @@ executive:
   what_is_this: 'A catalog investigation: eight studies, each a different network-reconfiguring rule implemented
     as a process-bigraph reaction on a shared graph substrate, each with an evolving-network animation
     and GIF.'
-  verdict: A single generalized NetworkDynamicsProcess reproduces all eight canonical Family-A dynamics;
-    every study's structural signature passes its behavior checks.
+  verdict: One generalized process reproduces all 8 Family-A dynamics; Family B then runs a real SBML
+    reactor (Repressilator, via viva-copasi) at every node with inter-node diffusion, and coupling synchronises
+    them.
   verdict_status: passed
   verdict_detail: 'All 8 Family-A studies pass: ER stays hub-free and connected; BA and fitness build
     dominant hubs with heavy tails; WS and adaptive conserve edges while reorganising; duplication-divergence
     reproduces heavy-tailed, clustered (and fragmenting) topology; forest-fire densifies; activity-driven
-    stays sparse and blinking. The architecture is one process + a pluggable reaction registry.'
+    stays sparse and blinking. The architecture is one process + a pluggable reaction registry. Family
+    B adds continuous multi-species dynamics ON the network: a COPASI/SBML Repressilator per node with
+    Fickian protein transport along edges — coupled oscillators synchronise (across-node spread → 0) while
+    the uncoupled control retains its spread. All 10 studies pass their checks.'
   decisions_needed:
-  - question: Proceed to Family B (SBML-at-nodes via viva-copasi, with inter-node transport)?
-    context: Family A is complete and green. Family B adds continuous multi-species node dynamics ON these
-      networks.
+  - question: Extend Family B further (dynamics ON a co-evolving topology, or richer SBML models / quorum
+      sensing)?
+    context: Family A (8 rules) and Family B (SBML-at-nodes + transport, 2 studies) are complete and green.
 scientific_argument:
   main_claim: Classic network-dynamics models are special cases of one generalized, reaction-driven process;
     each is recovered by registering a local rewrite rule, with no change to the process, composites,
@@ -54,6 +58,9 @@ scientific_argument:
     edge conservation, forest-fire densification, activity-driven sparsity.'
   - Adding a new dynamic is a single registered reaction function — demonstrated by the breadth of the
     catalog.
+  - Family B places a real COPASI/SBML Repressilator at every node (reusing viva-copasi) and couples them
+    by edge diffusion; coupling synchronises the oscillators (across-node spread → 0) vs the uncoupled
+    control.
   evidence_against:
   - The power-law exponent MLE is biased low at N≈60 (finite-size); precise exponents need far larger
     graphs.
@@ -62,6 +69,7 @@ scientific_argument:
   - 02-preferential-attachment/viz/preferential_attachment.gif (hub emergence)
   - 03-small-world-rewiring/viz/small_world_rewire.gif (ring → small world)
   - 07-adaptive-coevolution/viz/adaptive_rewire.gif (opinion segregation)
+  - 09-sbml-nodes-coupled/viz/repressilator_network_coupled.gif (synchronisation on the network)
   caveats:
   - Finite-size effects on degree-distribution exponents.
   - Metrics are single-seed per study (seed 7); trends are robust but not ensemble-averaged.
@@ -71,9 +79,9 @@ biological_story: 'Networks are everywhere in biology — protein interactions, 
   analogue: a gene duplicates, the copy inherits its partners, then diverges by losing some — reproducing
   the heavy-tailed, clustered topology of real protein-interaction networks. Preferential attachment and
   fitness capture how some nodes become hubs. Adaptive coevolution (study 7) is the conceptual bridge
-  to the next phase: when the state ON the nodes feeds back on the wiring between them. Family B will
-  make that feedback quantitative, placing an SBML reaction network in every node and letting species
-  diffuse along the edges.
+  to the next phase: when the state ON the nodes feeds back on the wiring between them. Family B makes
+  that concrete: a COPASI/SBML Repressilator runs in every node and its proteins diffuse along the edges,
+  so connected oscillators entrain — continuous, multi-species reaction–diffusion dynamics ON the network.
 
   '
 at_a_glance:
@@ -93,6 +101,10 @@ at_a_glance:
   role: Opinions + rewiring co-adapt → like-minded clusters (Gross–Blasius); bridge to Family B.
 - study: 08-activity-driven-temporal
   role: Activity-driven firing → a blinking temporal network (Perra).
+- study: 09-sbml-nodes-coupled
+  role: 'Family B: a Repressilator (SBML) at each node + protein diffusion along edges → synchronisation.'
+- study: 10-sbml-nodes-uncoupled
+  role: 'Family B control: diffusion off (D=0) → oscillators stay out of phase.'
 studies:
 - 01-erdos-renyi-random-growth
 - 02-preferential-attachment
@@ -102,6 +114,8 @@ studies:
 - 06-forest-fire-densification
 - 07-adaptive-coevolution
 - 08-activity-driven-temporal
+- 09-sbml-nodes-coupled
+- 10-sbml-nodes-uncoupled
 acceptance_criteria:
 - study: 01-erdos-renyi-random-growth
   behavior: er-giant-component
@@ -119,6 +133,10 @@ acceptance_criteria:
   behavior: ad-edge-count-conserved
 - study: 08-activity-driven-temporal
   behavior: adn-sparse-snapshot
+- study: 09-sbml-nodes-coupled
+  behavior: coupled-synchronises
+- study: 10-sbml-nodes-uncoupled
+  behavior: uncoupled-stays-spread
 expert_docs: []
 glossary:
 - term: reaction (process-bigraph)

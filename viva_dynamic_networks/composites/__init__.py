@@ -7,6 +7,7 @@ process emitting scalar observables, a RAMEmitter (for the live network
 animation) and a declared ParquetEmitter (so study ``behavior_tests`` evaluate).
 """
 from . import family_a  # noqa: F401
+from . import family_b  # noqa: F401
 from .family_a import (
     activity_driven,
     adaptive_rewire,
@@ -16,6 +17,10 @@ from .family_a import (
     forest_fire,
     preferential_attachment,
     small_world_rewire,
+)
+from .family_b import (
+    repressilator_network_coupled,
+    repressilator_network_uncoupled,
 )
 
 __all__ = [
@@ -27,4 +32,6 @@ __all__ = [
     "small_world_rewire",
     "adaptive_rewire",
     "activity_driven",
+    "repressilator_network_coupled",
+    "repressilator_network_uncoupled",
 ]
