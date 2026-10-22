@@ -67,7 +67,9 @@ def run_study(
         viz_dir = study_dir / "viz"
         viz_dir.mkdir(parents=True, exist_ok=True)
         positions = viz.compute_positions(frames, kind=layout)
-        viz.render_gif(frames, positions, viz_dir / f"{rule}.gif",
+        # GIF at the study root (bare filename) so the published bundle stages it
+        # via an `address: gif:<rule>.gif` visualization.
+        viz.render_gif(frames, positions, study_dir / f"{rule}.gif",
                        title=title, color_by=color_by, fps=5)
         html = viz.figure_to_html(viz.evolution_figure(
             frames, positions, title=title, color_by=color_by, subtitle=subtitle))
@@ -172,7 +174,7 @@ def run_sbml_study(
         viz_dir.mkdir(parents=True, exist_ok=True)
         positions = viz.compute_positions(frames, kind=layout)
         gif_frames = frames[::max(1, gif_stride)]
-        viz.render_gif(gif_frames, positions, viz_dir / f"{generator}.gif",
+        viz.render_gif(gif_frames, positions, study_dir / f"{generator}.gif",
                        title=title, color_by=f"species:{species}", fps=6)
         net_html = viz.figure_to_html(viz.evolution_figure(
             frames, positions, title=title, color_by=f"species:{species}",

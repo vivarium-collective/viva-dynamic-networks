@@ -41,7 +41,7 @@ baseline:
     k: 4.0
     seed: 7.0
 visualizations:
-- name: network-evolution
+- name: network-evolution (live)
   address: local:NetworkEvolution
   config:
     title: Adaptive coevolution (opinions + rewiring)
@@ -51,6 +51,11 @@ visualizations:
     composite: viva_dynamic_networks.composites.family_a.adaptive_rewire
     n_steps: 70
     render_mode: end
+- name: network-evolution (animation)
+  address: gif:adaptive_rewire.gif
+embed_visualizations:
+- name: Interactive network animation
+  url: /workspace/studies/07-adaptive-coevolution/viz/adaptive_rewire.html
 expected_behavior:
 - name: ad-conserves-structure
   observable: n_edges

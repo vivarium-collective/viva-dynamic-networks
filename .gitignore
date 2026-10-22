@@ -33,3 +33,6 @@ workspace/reports/assets/*
 .superpowers/brainstorm/
 # Scratch TODO list agents keep per-workspace; not tracked content.
 todo.md
+
+# published read-only workbench bundle (rebuilt by publish-dashboard.yml / CI)
+reports/published/

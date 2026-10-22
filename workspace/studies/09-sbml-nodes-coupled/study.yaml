@@ -50,6 +50,8 @@ visualizations:
     composite: viva_dynamic_networks.composites.family_b.repressilator_network_coupled
     n_steps: 240
     render_mode: end
+- name: concentration animation
+  address: gif:repressilator_network_coupled.gif
 expected_behavior:
 - name: sync-collapses-spread
   observable: sync_std
@@ -98,3 +100,8 @@ report:
     the across-node PX spread collapses from its initial value toward zero while the mean keeps oscillating
     — reaction–diffusion synchronisation on a network. This is the headline Family-B capability: continuous,
     multi-species dynamics ON an evolving network with inter-node transport.'
+embed_visualizations:
+- name: Interactive concentration network
+  url: /workspace/studies/09-sbml-nodes-coupled/viz/repressilator_network_coupled.html
+- name: Per-node PX time series
+  url: /workspace/studies/09-sbml-nodes-coupled/viz/repressilator_network_coupled_timeseries.html

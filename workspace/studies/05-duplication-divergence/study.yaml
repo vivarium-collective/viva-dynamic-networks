@@ -40,7 +40,7 @@ baseline:
     max_nodes: 60.0
     seed: 7.0
 visualizations:
-- name: network-evolution
+- name: network-evolution (live)
   address: local:NetworkEvolution
   config:
     title: Duplication–divergence (biological growth)
@@ -50,6 +50,11 @@ visualizations:
     composite: viva_dynamic_networks.composites.family_a.duplication_divergence
     n_steps: 57
     render_mode: end
+- name: network-evolution (animation)
+  address: gif:duplication_divergence.gif
+embed_visualizations:
+- name: Interactive network animation
+  url: /workspace/studies/05-duplication-divergence/viz/duplication_divergence.html
 expected_behavior:
 - name: dd-heavy-tail
   observable: max_degree

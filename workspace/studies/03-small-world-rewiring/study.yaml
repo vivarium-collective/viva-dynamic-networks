@@ -40,7 +40,7 @@ baseline:
     k: 4.0
     seed: 7.0
 visualizations:
-- name: network-evolution
+- name: network-evolution (live)
   address: local:NetworkEvolution
   config:
     title: Watts–Strogatz small-world rewiring
@@ -50,6 +50,11 @@ visualizations:
     composite: viva_dynamic_networks.composites.family_a.small_world_rewire
     n_steps: 45
     render_mode: end
+- name: network-evolution (animation)
+  address: gif:small_world_rewire.gif
+embed_visualizations:
+- name: Interactive network animation
+  url: /workspace/studies/03-small-world-rewiring/viz/small_world_rewire.html
 expected_behavior:
 - name: sw-conserves-edges
   observable: n_edges

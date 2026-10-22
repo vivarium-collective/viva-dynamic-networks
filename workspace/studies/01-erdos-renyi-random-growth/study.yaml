@@ -37,7 +37,7 @@ baseline:
     max_nodes: 60.0
     seed: 7.0
 visualizations:
-- name: network-evolution
+- name: network-evolution (live)
   address: local:NetworkEvolution
   config:
     title: Erdős–Rényi random growth
@@ -47,6 +47,11 @@ visualizations:
     composite: viva_dynamic_networks.composites.family_a.erdos_renyi
     n_steps: 60
     render_mode: end
+- name: network-evolution (animation)
+  address: gif:erdos_renyi.gif
+embed_visualizations:
+- name: Interactive network animation
+  url: /workspace/studies/01-erdos-renyi-random-growth/viz/erdos_renyi.html
 expected_behavior:
 - name: er-no-hubs
   observable: max_degree

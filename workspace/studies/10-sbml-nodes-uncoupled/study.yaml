@@ -48,6 +48,8 @@ visualizations:
     composite: viva_dynamic_networks.composites.family_b.repressilator_network_uncoupled
     n_steps: 240
     render_mode: end
+- name: concentration animation
+  address: gif:repressilator_network_uncoupled.gif
 expected_behavior:
 - name: stays-desynchronised
   observable: sync_std
@@ -90,3 +92,8 @@ report:
     transient value) but never phase-lock: a substantial spread persists (late across-node PX std ≈ 50),
     in sharp contrast to the coupled case where it collapses to ≈0. This control confirms the synchronisation
     in study 09 is caused by inter-node transport, not by the shared model.'
+embed_visualizations:
+- name: Interactive concentration network
+  url: /workspace/studies/10-sbml-nodes-uncoupled/viz/repressilator_network_uncoupled.html
+- name: Per-node PX time series
+  url: /workspace/studies/10-sbml-nodes-uncoupled/viz/repressilator_network_uncoupled_timeseries.html

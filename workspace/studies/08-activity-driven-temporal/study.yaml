@@ -39,7 +39,7 @@ baseline:
     n: 44.0
     seed: 7.0
 visualizations:
-- name: network-evolution
+- name: network-evolution (live)
   address: local:NetworkEvolution
   config:
     title: Activity-driven temporal network
@@ -49,6 +49,11 @@ visualizations:
     composite: viva_dynamic_networks.composites.family_a.activity_driven
     n_steps: 50
     render_mode: end
+- name: network-evolution (animation)
+  address: gif:activity_driven.gif
+embed_visualizations:
+- name: Interactive network animation
+  url: /workspace/studies/08-activity-driven-temporal/viz/activity_driven.html
 expected_behavior:
 - name: ad-conserves-nodes
   observable: n_nodes

@@ -39,7 +39,7 @@ baseline:
     max_nodes: 60.0
     seed: 7.0
 visualizations:
-- name: network-evolution
+- name: network-evolution (live)
   address: local:NetworkEvolution
   config:
     title: Barabási–Albert preferential attachment
@@ -49,6 +49,11 @@ visualizations:
     composite: viva_dynamic_networks.composites.family_a.preferential_attachment
     n_steps: 58
     render_mode: end
+- name: network-evolution (animation)
+  address: gif:preferential_attachment.gif
+embed_visualizations:
+- name: Interactive network animation
+  url: /workspace/studies/02-preferential-attachment/viz/preferential_attachment.html
 expected_behavior:
 - name: ba-forms-hubs
   observable: max_degree
