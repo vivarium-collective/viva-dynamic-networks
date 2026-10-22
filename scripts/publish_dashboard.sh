@@ -5,8 +5,8 @@
 # bundle.
 set -euo pipefail
 WS_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-OUT="${1:-$WS_ROOT/reports/published/dashboard}"
-BASE_PATH="/viva-dynamic-networks/dashboard"
+OUT="${1:-$WS_ROOT/reports/published/workbench}"
+BASE_PATH="/viva-dynamic-networks/workbench"
 INTERACTIVE_URL="https://github.com/vivarium-collective/viva-dynamic-networks"
 rm -rf "$OUT"
 PYTHONPATH="$WS_ROOT${PYTHONPATH:+:$PYTHONPATH}" \

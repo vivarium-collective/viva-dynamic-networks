@@ -1,7 +1,7 @@
 # dynamic-networks
 
 [![CI](https://github.com/vivarium-collective/viva-dynamic-networks/actions/workflows/workspace-ci.yml/badge.svg)](https://github.com/vivarium-collective/viva-dynamic-networks/actions/workflows/workspace-ci.yml)
-[![dashboard](https://img.shields.io/badge/dashboard-live-2ea44f)](https://vivarium-collective.github.io/viva-dynamic-networks/dashboard/)
+[![read-only workbench](https://img.shields.io/badge/read--only_workbench-live-2ea44f)](https://vivarium-collective.github.io/viva-dynamic-networks/workbench/)
 
 A catalog of network-dynamics rules, each written as a process-bigraph reaction.
 Add a node, rewire an edge, let a species diffuse — every rule is one `_add` /
@@ -9,7 +9,7 @@ Add a node, rewire an edge, let a species diffuse — every rule is one `_add` /
 comparable and adding one is a single function. Fifteen studies run the rules,
 show the network changing, and measure the structure that emerges.
 
-**[Open the interactive dashboard](https://vivarium-collective.github.io/viva-dynamic-networks/dashboard/)**
+**[Open the read-only workbench](https://vivarium-collective.github.io/viva-dynamic-networks/workbench/)**
 to browse every study, composite, and result in the browser — or run it locally
 (below).
 
