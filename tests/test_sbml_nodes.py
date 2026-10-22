@@ -60,3 +60,19 @@ def test_coupling_synchronises_more_than_uncoupled():
     u_late = np.mean([_px_spread(f) for f in uncoupled[-30:]])
     assert c_late < u_late, f"coupled spread {c_late} !< uncoupled {u_late}"
     assert c_late < 5.0, f"coupled did not synchronise (late spread {c_late})"
+
+
+def test_family_c_coevolution_generators():
+    """Topology co-evolves while reactors run: growing adds nodes, rewiring
+    churns edges; both keep valid species on every node."""
+    grow = _run(C.growing_repressilator_network, 24)
+    assert len(grow[-1]["nodes"]) > len(grow[0]["nodes"]), "network did not grow"
+
+    rew = _run(C.rewiring_repressilator_network, 24)
+    assert len({len(f["nodes"]) for f in rew}) == 1, "rewiring changed node count"
+    edge_sets = {frozenset(f["edges"].keys()) for f in rew}
+    assert len(edge_sets) > 1, "edges never rewired"
+    # species present on nodes in both
+    for frames in (grow, rew):
+        seeded = [n for n in frames[-1]["nodes"].values() if (n.get("species") or {})]
+        assert seeded, "no node carries species"

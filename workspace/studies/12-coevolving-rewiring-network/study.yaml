@@ -1,0 +1,107 @@
+schema_version: 4
+name: 12-coevolving-rewiring-network
+title: Dynamics on a rewiring network — synchrony survives continual rewiring
+created: '2026-10-22'
+status: completed
+investigation: dynamic-networks
+phase: Decide
+question: 'Do the coupled oscillators stay synchronised when the very edges that couple them are continuously
+  rewired?
+
+  '
+hypothesis: 'With the topology continuously small-world-rewired under the running reactors (node and edge
+  counts conserved), the coupling remains strong enough to reach and hold synchrony.
+
+  '
+objective: 'Run the rewiring_repressilator_network composite — SBML reactors + transport on a topology
+  that a PBG reaction reconfigures during the run — and measure synchrony.
+
+  '
+description: 'Coupled SBML oscillators synchronise and stay synchronised even as the coupling edges are
+  continuously rewired — reaction–diffusion is robust to an evolving (but well-connected) topology.
+
+
+  This is a Family-C (co-evolution) study: a Family-A reaction reconfigures the graph WHILE the Family-B
+  SBML reactors + inter-node transport run on it. See viz/ for the concentration-on-network animation
+  and the per-node time series.
+
+  '
+claim: Coupled SBML oscillators synchronise and stay synchronised even as the coupling edges are continuously
+  rewired — reaction–diffusion is robust to an evolving (but well-connected) topology.
+confidence: Accepted
+parent_studies:
+- study: 11-coevolving-growing-network
+  relation: alternative-to
+baseline:
+- name: baseline
+  composite: viva_dynamic_networks.composites.family_c.rewiring_repressilator_network
+  params:
+    D: 0.25
+    p: 0.6
+    n: 12.0
+    seed: 1.0
+visualizations:
+- name: concentration-on-coevolving-network
+  address: local:NetworkEvolution
+  config:
+    title: Dynamics on a rewiring network — synchrony survives continual rewiring
+    layout: circular
+    color_by: species:PX
+    subtitle: a ring of Repressilator reactors whose edges are continuously small-world-rewired
+    composite: viva_dynamic_networks.composites.family_c.rewiring_repressilator_network
+    n_steps: 170
+    render_mode: end
+- name: concentration animation
+  address: gif:rewiring_repressilator_network.gif
+embed_visualizations:
+- name: Interactive concentration network
+  url: /workspace/studies/12-coevolving-rewiring-network/viz/rewiring_repressilator_network.html
+- name: Per-node PX time series
+  url: /workspace/studies/12-coevolving-rewiring-network/viz/rewiring_repressilator_network_timeseries.html
+expected_behavior:
+- name: edges-rewire
+  observable: n_edges
+  condition: edges are continuously rewired (count conserved, wiring changes)
+  rationale: A small-world-rewire reaction moves one edge endpoint per step.
+- name: rewiring-synchronises
+  observable: sync_std
+  condition: the across-node spread collapses despite the changing wiring
+  rationale: Rewiring preserves connectivity and degree, so coupling stays effective.
+behavior_tests:
+- name: rewires-and-synchronises
+  classification: quantitative
+  description: Final across-node PX spread is <30% of the early value despite continual rewiring.
+  measure:
+    kind: flat
+    observable: sync_std
+    reduce: last
+  pass_if:
+    op: at_most
+    value: 0.3
+  units: ratio
+  requires_simulation: 'yes'
+  cites:
+  - watts1998smallworld
+  - colizza2007reaction
+  - elowitz2000repressilator
+bibliography:
+  bib_keys:
+  - watts1998smallworld
+  - colizza2007reaction
+  - elowitz2000repressilator
+findings:
+- name: rewiring_repressilator_network-result
+  summary: Coupled SBML oscillators synchronise and stay synchronised even as the coupling edges are continuously
+    rewired — reaction–diffusion is robust to an evolving (but well-connected) topology.
+  detail: 'The same 12 reactors on a ring whose edges are continuously small-world-rewired while the oscillators
+    run (node and edge counts conserved, only the wiring changes). Because rewiring preserves connectivity
+    and degree, the coupling stays effective: the oscillators reach and hold synchrony (across-node spread
+    → 0) despite the topology never standing still — the companion to the growing-network study.'
+report:
+  verdict: Coupled SBML oscillators synchronise and stay synchronised even as the coupling edges are continuously
+    rewired — reaction–diffusion is robust to an evolving (but well-connected) topology.
+  verdict_status: passed
+  verdict_detail: 'The same 12 reactors on a ring whose edges are continuously small-world-rewired while
+    the oscillators run (node and edge counts conserved, only the wiring changes). Because rewiring preserves
+    connectivity and degree, the coupling stays effective: the oscillators reach and hold synchrony (across-node
+    spread → 0) despite the topology never standing still — the companion to the growing-network study.'

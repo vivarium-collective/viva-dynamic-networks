@@ -32,9 +32,10 @@ executive:
   what_is_this: 'A catalog investigation: eight studies, each a different network-reconfiguring rule implemented
     as a process-bigraph reaction on a shared graph substrate, each with an evolving-network animation
     and GIF.'
-  verdict: One generalized process reproduces all 8 Family-A dynamics; Family B then runs a real SBML
-    reactor (Repressilator, via viva-copasi) at every node with inter-node diffusion, and coupling synchronises
-    them.
+  verdict: One generalized process reproduces all 8 Family-A dynamics; Family B runs a real SBML Repressilator
+    (via viva-copasi) at every node with inter-node diffusion; and Family C runs that reaction–diffusion
+    ON a topology the process is itself reconfiguring — growing or rewiring — so topology and node state
+    co-evolve.
   verdict_status: passed
   verdict_detail: 'All 8 Family-A studies pass: ER stays hub-free and connected; BA and fitness build
     dominant hubs with heavy tails; WS and adaptive conserve edges while reorganising; duplication-divergence
@@ -42,15 +43,18 @@ executive:
     stays sparse and blinking. The architecture is one process + a pluggable reaction registry. Family
     B adds continuous multi-species dynamics ON the network: a COPASI/SBML Repressilator per node with
     Fickian protein transport along edges — coupled oscillators synchronise (across-node spread → 0) while
-    the uncoupled control retains its spread. All 10 studies pass their checks.'
+    the uncoupled control retains its spread. All 10 studies pass their checks. Family C closes the loop:
+    the SBML reactors + transport run WHILE a Family-A reaction reshapes the graph. On a continuously-rewired
+    ring the oscillators synchronise fully; on a forest-fire-grown network most newcomers entrain while
+    weakly-attached nodes lag (topology-dependent synchronisability). All 12 studies pass.'
   decisions_needed:
-  - question: Extend Family B further (dynamics ON a co-evolving topology, or richer SBML models / quorum
-      sensing)?
-    context: Family A (8 rules) and Family B (SBML-at-nodes + transport, 2 studies) are complete and green.
+  - question: Investigation complete across Families A/B/C — publish + open the PR, or extend further
+      (richer SBML models, quorum-sensing coupling, stochastic reactors)?
+    context: 12 studies span dynamics OF, ON, and on a CO-EVOLVING network, all green.
 scientific_argument:
-  main_claim: Classic network-dynamics models are special cases of one generalized, reaction-driven process;
-    each is recovered by registering a local rewrite rule, with no change to the process, composites,
-    or dashboard.
+  main_claim: Classic network-dynamics models — and continuous reaction–diffusion dynamics running ON
+    them, even while the topology itself changes — are all special cases of one generalized, reaction-driven
+    process-bigraph composite.
   evidence_for:
   - All 8 rules run end-to-end as process-bigraph _add/_remove structural reactions on a shared node/edge
     substrate.
@@ -61,6 +65,9 @@ scientific_argument:
   - Family B places a real COPASI/SBML Repressilator at every node (reusing viva-copasi) and couples them
     by edge diffusion; coupling synchronises the oscillators (across-node spread → 0) vs the uncoupled
     control.
+  - 'Family C runs the SBML reactors + transport ON a topology a Family-A reaction is simultaneously reconfiguring
+    (growing or rewiring): the rewiring ring synchronises fully, the growing network mostly entrains —
+    the dynamics OF and ON the network co-evolve in one composite.'
   evidence_against:
   - The power-law exponent MLE is biased low at N≈60 (finite-size); precise exponents need far larger
     graphs.
@@ -70,6 +77,8 @@ scientific_argument:
   - 03-small-world-rewiring/viz/small_world_rewire.gif (ring → small world)
   - 07-adaptive-coevolution/viz/adaptive_rewire.gif (opinion segregation)
   - 09-sbml-nodes-coupled/viz/repressilator_network_coupled.gif (synchronisation on the network)
+  - 12-coevolving-rewiring-network/viz/rewiring_repressilator_network.gif (synchrony survives continual
+    rewiring)
   caveats:
   - Finite-size effects on degree-distribution exponents.
   - Metrics are single-seed per study (seed 7); trends are robust but not ensemble-averaged.
@@ -105,6 +114,12 @@ at_a_glance:
   role: 'Family B: a Repressilator (SBML) at each node + protein diffusion along edges → synchronisation.'
 - study: 10-sbml-nodes-uncoupled
   role: 'Family B control: diffusion off (D=0) → oscillators stay out of phase.'
+- study: 11-coevolving-growing-network
+  role: 'Family C (synthesis): SBML reactors run while forest-fire growth BUILDS the network — most newcomers
+    entrain; sync is topology-dependent.'
+- study: 12-coevolving-rewiring-network
+  role: 'Family C: reactors on a ring whose edges are continuously rewired — synchrony survives the changing
+    wiring.'
 studies:
 - 01-erdos-renyi-random-growth
 - 02-preferential-attachment
@@ -116,6 +131,8 @@ studies:
 - 08-activity-driven-temporal
 - 09-sbml-nodes-coupled
 - 10-sbml-nodes-uncoupled
+- 11-coevolving-growing-network
+- 12-coevolving-rewiring-network
 acceptance_criteria:
 - study: 01-erdos-renyi-random-growth
   behavior: er-giant-component
@@ -137,6 +154,10 @@ acceptance_criteria:
   behavior: coupled-synchronises
 - study: 10-sbml-nodes-uncoupled
   behavior: uncoupled-stays-spread
+- study: 11-coevolving-growing-network
+  behavior: grows-and-mostly-entrains
+- study: 12-coevolving-rewiring-network
+  behavior: rewires-and-synchronises
 expert_docs: []
 glossary:
 - term: reaction (process-bigraph)

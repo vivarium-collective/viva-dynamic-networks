@@ -74,6 +74,7 @@ class NetworkSBMLReactors(Process):
 
     config_schema = {
         "model_source": {"_type": "string", "_default": ""},
+        "seed_new_nodes": {"_type": "boolean", "_default": True},
     }
 
     def __init__(self, config=None, core=None):
@@ -82,6 +83,19 @@ class NetworkSBMLReactors(Process):
         self._models: dict = {}
         self._sbml_ids, self._id2name, self._name2id, self._initial = \
             _species_mapping(self._src)
+        # A pool of limit-cycle phases so nodes that appear mid-run (e.g. added
+        # by a Family-A growth reaction on a co-evolving topology) start at a
+        # varied phase rather than all at the model's single default state.
+        self._phase_pool = (sample_phase_states(self._src, 32, seed=0)
+                            if self.config.get("seed_new_nodes", True) else [])
+
+    def _seed_species(self, nid: str) -> dict:
+        if self._phase_pool:
+            try:
+                return dict(self._phase_pool[int(nid) % len(self._phase_pool)])
+            except (TypeError, ValueError):
+                return dict(self._phase_pool[hash(nid) % len(self._phase_pool)])
+        return dict(self._initial)
 
     def inputs(self):
         return {"nodes": "map[dynamic_node]"}
@@ -102,9 +116,10 @@ class NetworkSBMLReactors(Process):
         nodes = state.get("nodes", {}) or {}
         out: dict = {}
         for nid, node in nodes.items():
+            was_empty = not (node.get("species"))
             cur = dict(node.get("species") or {})
             if not cur:
-                cur = dict(self._initial)  # un-seeded node → model defaults
+                cur = self._seed_species(nid)  # newcomer → a varied phase
             dm = self._model(nid)
             for sid, val in cur.items():
                 name = self._id2name.get(sid)
@@ -118,7 +133,10 @@ class NetworkSBMLReactors(Process):
             for sid in cur:
                 name = self._id2name.get(sid)
                 if name in df.columns:
-                    delta[sid] = float(last[name]) - cur[sid]
+                    new_val = float(last[name])
+                    # For a newcomer the store holds no baseline yet, so emit the
+                    # absolute value (store 0 → new_val); otherwise emit the delta.
+                    delta[sid] = new_val if was_empty else new_val - cur[sid]
             out[nid] = {"species": delta}
         return {"nodes": out}
 

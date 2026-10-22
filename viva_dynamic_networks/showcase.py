@@ -135,7 +135,8 @@ def run_sbml_study(
 
     study_dir = Path(study_dir).resolve()
     workspace_root = _find_workspace_root(study_dir)
-    spec_id = f"viva_dynamic_networks.composites.family_b.{generator}"
+    _gen = getattr(_composites, generator)
+    spec_id = f"{getattr(_gen, '__module__', 'viva_dynamic_networks.composites')}.{generator}"
     study_slug = study_dir.name
 
     run_id = uuid.uuid4().hex
@@ -197,4 +198,6 @@ def run_sbml_study(
         "early_std": early_std, "late_std": late_std,
         "sync_ratio": late_std / early_std if early_std > 1e-9 else None,
         "amplitude": amplitude, "n_frames": len(frames),
+        "n_nodes_final": len(frames[-1]["nodes"]),
+        "n_edges_final": len(frames[-1]["edges"]),
     }

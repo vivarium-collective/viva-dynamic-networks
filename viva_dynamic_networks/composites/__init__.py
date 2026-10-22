@@ -8,6 +8,7 @@ animation) and a declared ParquetEmitter (so study ``behavior_tests`` evaluate).
 """
 from . import family_a  # noqa: F401
 from . import family_b  # noqa: F401
+from . import family_c  # noqa: F401
 from .family_a import (
     activity_driven,
     adaptive_rewire,
@@ -22,6 +23,10 @@ from .family_b import (
     repressilator_network_coupled,
     repressilator_network_uncoupled,
 )
+from .family_c import (
+    growing_repressilator_network,
+    rewiring_repressilator_network,
+)
 
 __all__ = [
     "erdos_renyi",
@@ -34,4 +39,6 @@ __all__ = [
     "activity_driven",
     "repressilator_network_coupled",
     "repressilator_network_uncoupled",
+    "growing_repressilator_network",
+    "rewiring_repressilator_network",
 ]
