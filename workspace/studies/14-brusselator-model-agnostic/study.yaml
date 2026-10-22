@@ -1,0 +1,56 @@
+schema_version: 4
+name: 14-brusselator-model-agnostic
+title: Model-agnostic node reactor — Brusselator (proposed)
+created: '2026-10-22'
+status: planned
+investigation: dynamic-networks
+phase: Design
+confidence: Planned
+question: 'Is the SBML-at-nodes architecture model-agnostic — does swapping the Repressilator for a Brusselator
+  reproduce reaction–diffusion patterning on the network with no code change?
+
+  '
+hypothesis: 'Because NetworkSBMLReactors loads any SBML model and NetworkTransport diffuses any species,
+  pointing them at a Brusselator yields Turing-like patterning / synchronisation on the network with the
+  identical process code.
+
+  '
+objective: 'Vendor a Brusselator SBML, point the reactors at it, and reproduce a Family-B/C study to demonstrate
+  model-independence.
+
+  '
+description: 'Proposed follow-up seeded from study 11. Demonstrates the node model is a plug-in, not hardcoded.
+
+
+  (Baseline points at the composite this proposal would EXTEND; the new mechanism is not yet built.)
+
+  '
+claim: ''
+parent_studies:
+- study: 11-coevolving-growing-network
+  relation: builds-on
+seeded_from:
+  study: 11-coevolving-growing-network
+  proposal: model-agnostic-brusselator
+expected_behavior:
+- name: model-swap-works
+  observable: sync_std
+  condition: a different SBML model runs on the network with no process code change
+  rationale: The reactor/transport processes read species generically from basico, so any SBML model should
+    work.
+baseline:
+- name: starting-point
+  composite: viva_dynamic_networks.composites.family_c.growing_repressilator_network
+  params:
+    D: 0.25
+    max_nodes: 11.0
+    seed: 2.0
+behavior_tests: []
+bibliography:
+  bib_keys:
+  - colizza2007reaction
+report:
+  verdict: ''
+  verdict_status: planning
+  verdict_detail: Proposed follow-up — not yet built or run. Seeded from 11-coevolving-growing-network
+    (model-agnostic-brusselator).

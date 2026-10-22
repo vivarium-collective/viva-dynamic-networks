@@ -110,3 +110,11 @@ report:
   verdict_status: passed
   verdict_detail: Each snapshot is a sparse, blinking contact graph rather than an accreting structure
     — the temporal-network view that complements the growth and rewire families.
+followup_proposals:
+- id: transport-on-temporal
+  title: Reaction–diffusion on a temporal (blinking) network
+  status: proposed
+  motivation: Transport in Families B/C assumes persistent edges; activity-driven edges exist only for
+    one window, so coupling should be intermittent.
+  hypothesized_mechanism: Apply inter-node transport only across the edges present in the current activity-driven
+    snapshot — intermittent, contact-gated diffusion.

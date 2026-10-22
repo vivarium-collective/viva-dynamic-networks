@@ -1,0 +1,57 @@
+schema_version: 4
+name: 13-quorum-sensing-coupling
+title: Quorum-sensing coupling (proposed)
+created: '2026-10-22'
+status: planned
+investigation: dynamic-networks
+phase: Design
+confidence: Planned
+question: 'Does coupling through a single diffusible signal molecule synchronise the networked reactors
+  as effectively as diffusing the internal proteins?
+
+  '
+hypothesis: 'A dedicated autoinducer species produced and sensed per node, diffusing along the edges,
+  provides indirect coupling sufficient for synchronisation at lower transport flux than direct protein
+  diffusion.
+
+  '
+objective: 'Extend the node SBML model with a signaling species and diffuse only that molecule; compare
+  synchronisation to study 09.
+
+  '
+description: 'Proposed follow-up seeded from study 09. Replaces all-protein diffusion with biologically-realistic
+  quorum-sensing coupling via one autoinducer.
+
+
+  (Baseline points at the composite this proposal would EXTEND; the new mechanism is not yet built.)
+
+  '
+claim: ''
+parent_studies:
+- study: 09-sbml-nodes-coupled
+  relation: builds-on
+seeded_from:
+  study: 09-sbml-nodes-coupled
+  proposal: quorum-sensing
+expected_behavior:
+- name: qs-synchronises
+  observable: sync_std
+  condition: signal-only coupling still collapses the across-node spread
+  rationale: Indirect coupling through a shared diffusible signal is the canonical cell–cell synchronisation
+    mechanism.
+baseline:
+- name: starting-point
+  composite: viva_dynamic_networks.composites.family_b.repressilator_network_coupled
+  params:
+    D: 0.3
+    n: 9.0
+    seed: 1.0
+behavior_tests: []
+bibliography:
+  bib_keys:
+  - colizza2007reaction
+  - elowitz2000repressilator
+report:
+  verdict: ''
+  verdict_status: planning
+  verdict_detail: Proposed follow-up — not yet built or run. Seeded from 09-sbml-nodes-coupled (quorum-sensing).

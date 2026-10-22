@@ -124,3 +124,19 @@ report:
     the uniform-degree rewiring study (12), which synchronises fully. Topology (dynamics OF the network)
     and continuous multi-species node state (dynamics ON the network) co-evolve in one process-bigraph
     composite.'
+followup_proposals:
+- id: model-agnostic-brusselator
+  title: Model-agnostic node reactor (Brusselator)
+  status: accepted
+  seeded_study: 14-brusselator-model-agnostic
+  motivation: Families B/C hardcode the Repressilator; the architecture should accept any SBML model with
+    no code change.
+  hypothesized_mechanism: Point NetworkSBMLReactors at a Brusselator SBML instead; the reactor + transport
+    code is model-independent, so reaction–diffusion patterning should emerge on the network.
+- id: degree-resolved-entrainment
+  title: Degree-resolved entrainment analysis
+  status: proposed
+  motivation: This study found low-degree newcomers lag the synchronised core; the dependence on node
+    degree should be quantified.
+  hypothesized_mechanism: Measure a per-node phase-lock order parameter as a function of node degree over
+    the growth trajectory.

@@ -105,3 +105,11 @@ report:
     the oscillators run (node and edge counts conserved, only the wiring changes). Because rewiring preserves
     connectivity and degree, the coupling stays effective: the oscillators reach and hold synchrony (across-node
     spread → 0) despite the topology never standing still — the companion to the growing-network study.'
+followup_proposals:
+- id: stochastic-reactors
+  title: Stochastic (Gillespie) reactors at the nodes
+  status: proposed
+  motivation: The deterministic Repressilator can relax toward a limit cycle; stochastic kinetics sustain
+    noisier oscillations and stress-test whether coupling still synchronises.
+  hypothesized_mechanism: Use COPASI's stochastic (SSA) time-course per node instead of the deterministic
+    integrator.

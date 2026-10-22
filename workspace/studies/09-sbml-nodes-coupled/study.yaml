@@ -105,3 +105,12 @@ embed_visualizations:
   url: /workspace/studies/09-sbml-nodes-coupled/viz/repressilator_network_coupled.html
 - name: Per-node PX time series
   url: /workspace/studies/09-sbml-nodes-coupled/viz/repressilator_network_coupled_timeseries.html
+followup_proposals:
+- id: quorum-sensing
+  title: Quorum-sensing coupling via a dedicated signal molecule
+  status: accepted
+  seeded_study: 13-quorum-sensing-coupling
+  motivation: This study couples by diffusing all three proteins; real cell–cell coupling uses a specific
+    diffusible signal (e.g. an AHL autoinducer), not the internal proteins.
+  hypothesized_mechanism: Add a signaling species produced and sensed per node, and diffuse ONLY that
+    molecule along the edges (indirect coupling).

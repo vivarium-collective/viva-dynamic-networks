@@ -113,3 +113,13 @@ report:
   verdict_detail: Node and edge counts stay fixed while the blue/orange opinions segregate into like-minded
     neighbourhoods — the coevolutionary self-organisation Gross & Blasius review, and the natural bridge
     to dynamics-on-networks (Family B).
+followup_proposals:
+- id: sbml-on-adaptive
+  title: SBML reactors on a state-driven adaptive network
+  status: accepted
+  seeded_study: 15-sbml-adaptive-coevolution
+  motivation: Here the rewiring is driven by a DISCRETE opinion; Family C rewired by a fixed rule. The
+    richer case lets a CONTINUOUS node state (an SBML readout) drive the rewiring — closing the state→topology
+    feedback.
+  hypothesized_mechanism: Rewire edges based on a per-node SBML observable (e.g. oscillator phase or a
+    protein level), so topology self-organises around the continuous dynamics.

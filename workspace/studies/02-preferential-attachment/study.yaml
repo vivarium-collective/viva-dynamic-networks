@@ -115,3 +115,11 @@ report:
     Erdős–Rényi baseline — the signature of preferential attachment. At N≈60 the maximum-likelihood exponent
     (γ≈1.5) is biased below the asymptotic BA value of 3, a known finite-size effect; the robust, scale-independent
     signal is that the maximum degree is several times the mean (vs the narrow Erdős–Rényi spread).
+followup_proposals:
+- id: nonlinear-pa-aging
+  title: Nonlinear preferential attachment & aging kernels
+  status: proposed
+  motivation: This study used the linear BA kernel Π∝k; nonlinear (Π∝k^α) and node-aging kernels change
+    whether a single hub dominates.
+  hypothesized_mechanism: Add an attachment exponent α and an age-decay factor to the preferential_attachment
+    reaction; sweep α to cross the super/sub-linear sync transition.

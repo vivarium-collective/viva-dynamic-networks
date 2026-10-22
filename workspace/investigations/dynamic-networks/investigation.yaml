@@ -46,11 +46,14 @@ executive:
     the uncoupled control retains its spread. All 10 studies pass their checks. Family C closes the loop:
     the SBML reactors + transport run WHILE a Family-A reaction reshapes the graph. On a continuously-rewired
     ring the oscillators synchronise fully; on a forest-fire-grown network most newcomers entrain while
-    weakly-attached nodes lag (topology-dependent synchronisability). All 12 studies pass.'
+    weakly-attached nodes lag (topology-dependent synchronisability). All 12 studies pass. Three follow-up
+    directions are recorded as proposed studies (13–15): quorum-sensing coupling, a model-agnostic Brusselator
+    node reactor, and SBML-state-driven adaptive coevolution.'
   decisions_needed:
-  - question: Investigation complete across Families A/B/C — publish + open the PR, or extend further
-      (richer SBML models, quorum-sensing coupling, stochastic reactors)?
-    context: 12 studies span dynamics OF, ON, and on a CO-EVOLVING network, all green.
+  - question: Build out the proposed follow-ups (studies 13–15)?
+    context: 'Families A/B/C are complete and green (12 studies). Three proposed studies — quorum-sensing
+      coupling, a model-agnostic Brusselator swap, and SBML-state-driven adaptive coevolution — are scoped
+      (status: planned, seeded from studies 09/11/07) as the next extensions.'
 scientific_argument:
   main_claim: Classic network-dynamics models — and continuous reaction–diffusion dynamics running ON
     them, even while the topology itself changes — are all special cases of one generalized, reaction-driven
@@ -120,6 +123,13 @@ at_a_glance:
 - study: 12-coevolving-rewiring-network
   role: 'Family C: reactors on a ring whose edges are continuously rewired — synchrony survives the changing
     wiring.'
+- study: 13-quorum-sensing-coupling
+  role: 'Proposed: couple via one diffusible signal molecule (quorum sensing) instead of all proteins.'
+- study: 14-brusselator-model-agnostic
+  role: 'Proposed: swap the Repressilator for a Brusselator to show the node model is a plug-in.'
+- study: 15-sbml-adaptive-coevolution
+  role: 'Proposed: let the continuous SBML state drive the rewiring — the continuous analogue of study
+    07.'
 studies:
 - 01-erdos-renyi-random-growth
 - 02-preferential-attachment
@@ -133,6 +143,9 @@ studies:
 - 10-sbml-nodes-uncoupled
 - 11-coevolving-growing-network
 - 12-coevolving-rewiring-network
+- 13-quorum-sensing-coupling
+- 14-brusselator-model-agnostic
+- 15-sbml-adaptive-coevolution
 acceptance_criteria:
 - study: 01-erdos-renyi-random-growth
   behavior: er-giant-component

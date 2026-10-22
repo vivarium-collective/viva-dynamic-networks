@@ -1,0 +1,56 @@
+schema_version: 4
+name: 15-sbml-adaptive-coevolution
+title: SBML-driven adaptive coevolution (proposed)
+created: '2026-10-22'
+status: planned
+investigation: dynamic-networks
+phase: Design
+confidence: Planned
+question: 'When the continuous node state (an SBML readout) itself drives the rewiring, does a self-organised
+  modular topology emerge?
+
+  '
+hypothesis: 'Letting each node rewire toward neighbours with a similar SBML observable (e.g. oscillator
+  phase) closes the state→topology feedback and self-organises the network into phase-coherent modules.
+
+  '
+objective: 'Couple an SBML-observable-driven rewiring rule to the Family-B reactors, so topology and continuous
+  state co-adapt (the continuous generalisation of study 07).
+
+  '
+description: 'Proposed follow-up seeded from study 07. The continuous-state analogue of adaptive coevolution:
+  the richest point in the OF↔ON feedback loop.
+
+
+  (Baseline points at the composite this proposal would EXTEND; the new mechanism is not yet built.)
+
+  '
+claim: ''
+parent_studies:
+- study: 07-adaptive-coevolution
+  relation: builds-on
+seeded_from:
+  study: 07-adaptive-coevolution
+  proposal: sbml-on-adaptive
+expected_behavior:
+- name: state-driven-modules
+  observable: clustering
+  condition: phase-coherent modules emerge from state-driven rewiring
+  rationale: Adaptive rewiring toward like-state neighbours is known to fragment networks into assortative
+    communities (Gross & Blasius).
+baseline:
+- name: starting-point
+  composite: viva_dynamic_networks.composites.family_a.adaptive_rewire
+  params:
+    w: 0.65
+    n: 40.0
+    seed: 0.0
+behavior_tests: []
+bibliography:
+  bib_keys:
+  - gross2008adaptive
+  - rodrigues2016kuramoto
+report:
+  verdict: ''
+  verdict_status: planning
+  verdict_detail: Proposed follow-up — not yet built or run. Seeded from 07-adaptive-coevolution (sbml-on-adaptive).
