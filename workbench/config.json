@@ -1,0 +1,7 @@
+{
+  "mode": "snapshot",
+  "smsApiBase": "",
+  "repo": "https://github.com/vivarium-collective/viva-dynamic-networks.git",
+  "commit": "7b9528c87fa2ed2e79b2823271c974b8399d1bb9",
+  "generated_from_ref": "dynamic-networks"
+}
