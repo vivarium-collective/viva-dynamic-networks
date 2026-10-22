@@ -1,0 +1,112 @@
+schema_version: 4
+name: 02-preferential-attachment
+title: Barabási–Albert preferential attachment
+created: '2026-10-22'
+status: completed
+investigation: dynamic-networks
+phase: Decide
+question: 'Does degree-proportional attachment produce scale-free hubs?
+
+  '
+hypothesis: 'Linking new nodes preferentially to high-degree nodes yields a power-law degree distribution
+  with a few dominant hubs.
+
+  '
+objective: 'Run the preferential_attachment reaction and show how it reconfigures the network, measuring
+  its signature structural observables.
+
+  '
+description: 'Degree-proportional attachment produces scale-free hubs with a power-law degree tail — unlike
+  random growth.
+
+
+  The network is stored as process-bigraph node/edge maps and reconfigured each step by the `preferential_attachment`
+  reaction (emitting _add/_remove structural sentinels). The animation and GIF in viz/ show the evolution;
+  scalar metrics are emitted for the behavior tests.
+
+  '
+claim: Degree-proportional attachment produces scale-free hubs with a power-law degree tail — unlike random
+  growth.
+confidence: Accepted
+parent_studies:
+- study: 01-erdos-renyi-random-growth
+  relation: builds-on
+baseline:
+- name: baseline
+  composite: viva_dynamic_networks.composites.family_a.preferential_attachment
+  params:
+    m: 2.0
+    max_nodes: 60.0
+    seed: 7.0
+visualizations:
+- name: network-evolution
+  address: local:NetworkEvolution
+  config:
+    title: Barabási–Albert preferential attachment
+    layout: spring
+    color_by: degree
+    subtitle: new nodes attach to existing nodes ∝ degree ('rich get richer')
+    composite: viva_dynamic_networks.composites.family_a.preferential_attachment
+    n_steps: 58
+    render_mode: end
+expected_behavior:
+- name: ba-forms-hubs
+  observable: max_degree
+  condition: a few nodes accumulate far more edges than the mean
+  rationale: '''Rich get richer'' concentrates edges on early, high-degree nodes.'
+- name: ba-heavy-tail
+  observable: powerlaw_exponent
+  condition: the degree distribution is heavy-tailed (finite, non-Poisson), approaching the scale-free
+    regime
+  rationale: The BA model has an asymptotic exponent γ=3; at N≈60 the finite-size MLE is biased low, but
+    the tail is clearly heavier than Erdős–Rényi.
+behavior_tests:
+- name: ba-hub-emerges
+  classification: quantitative
+  description: The maximum degree reaches ≥10 (a dominant hub).
+  measure:
+    kind: flat
+    observable: max_degree
+    reduce: last
+  pass_if:
+    op: at_least
+    value: 10
+  units: edges
+  requires_simulation: 'yes'
+  cites:
+  - barabasi1999emergence
+  - albert2002statistical
+- name: ba-connected
+  classification: quantitative
+  description: The network stays fully connected (BA growth never disconnects).
+  measure:
+    kind: flat
+    observable: largest_component_fraction
+    reduce: last
+  pass_if:
+    op: at_least
+    value: 0.99
+  units: fraction
+  requires_simulation: 'yes'
+  cites:
+  - barabasi1999emergence
+bibliography:
+  bib_keys:
+  - barabasi1999emergence
+  - albert2002statistical
+findings:
+- name: preferential_attachment-signature
+  summary: Degree-proportional attachment produces scale-free hubs with a power-law degree tail — unlike
+    random growth.
+  detail: A clear hub emerges and the degree distribution is heavy-tailed, in contrast to the Erdős–Rényi
+    baseline — the signature of preferential attachment. At N≈60 the maximum-likelihood exponent (γ≈1.5)
+    is biased below the asymptotic BA value of 3, a known finite-size effect; the robust, scale-independent
+    signal is that the maximum degree is several times the mean (vs the narrow Erdős–Rényi spread).
+report:
+  verdict: Degree-proportional attachment produces scale-free hubs with a power-law degree tail — unlike
+    random growth.
+  verdict_status: passed
+  verdict_detail: A clear hub emerges and the degree distribution is heavy-tailed, in contrast to the
+    Erdős–Rényi baseline — the signature of preferential attachment. At N≈60 the maximum-likelihood exponent
+    (γ≈1.5) is biased below the asymptotic BA value of 3, a known finite-size effect; the robust, scale-independent
+    signal is that the maximum degree is several times the mean (vs the narrow Erdős–Rényi spread).

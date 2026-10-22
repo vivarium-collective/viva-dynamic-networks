@@ -1,0 +1,104 @@
+schema_version: 4
+name: 01-erdos-renyi-random-growth
+title: Erdős–Rényi random growth
+created: '2026-10-22'
+status: completed
+investigation: dynamic-networks
+phase: Decide
+question: 'What topology emerges when edges form purely at random, with no preference?
+
+  '
+hypothesis: 'Random attachment yields a homogeneous Poisson degree distribution with no hubs — the null
+  baseline for every structured rule that follows.
+
+  '
+objective: 'Run the erdos_renyi reaction and show how it reconfigures the network, measuring its signature
+  structural observables.
+
+  '
+description: 'Random growth produces a homogeneous, hub-free network (Poisson-like degrees) — the null
+  baseline the structured rules are read against.
+
+
+  The network is stored as process-bigraph node/edge maps and reconfigured each step by the `erdos_renyi`
+  reaction (emitting _add/_remove structural sentinels). The animation and GIF in viz/ show the evolution;
+  scalar metrics are emitted for the behavior tests.
+
+  '
+claim: Random growth produces a homogeneous, hub-free network (Poisson-like degrees) — the null baseline
+  the structured rules are read against.
+confidence: Accepted
+parent_studies: []
+baseline:
+- name: baseline
+  composite: viva_dynamic_networks.composites.family_a.erdos_renyi
+  params:
+    p: 0.08
+    max_nodes: 60.0
+    seed: 7.0
+visualizations:
+- name: network-evolution
+  address: local:NetworkEvolution
+  config:
+    title: Erdős–Rényi random growth
+    layout: spring
+    color_by: degree
+    subtitle: node arrives each step, links to each existing node w.p. p
+    composite: viva_dynamic_networks.composites.family_a.erdos_renyi
+    n_steps: 60
+    render_mode: end
+expected_behavior:
+- name: er-no-hubs
+  observable: max_degree
+  condition: max degree stays close to the mean (no heavy tail)
+  rationale: Uniform random attachment gives Poisson degrees; the maximum is only modestly above the mean.
+- name: er-connects
+  observable: largest_component_fraction
+  condition: a giant component spans almost all nodes by the end
+  rationale: Above the percolation threshold ⟨k⟩>1 a giant component emerges (Erdős–Rényi).
+behavior_tests:
+- name: er-giant-component
+  classification: quantitative
+  description: A giant component spans ≥90% of nodes at the end.
+  measure:
+    kind: flat
+    observable: largest_component_fraction
+    reduce: last
+  pass_if:
+    op: at_least
+    value: 0.9
+  units: fraction
+  requires_simulation: 'yes'
+  cites:
+  - erdos1960evolution
+  - newman2003structure
+- name: er-no-dominant-hub
+  classification: quantitative
+  description: Max degree is modest (< 4× mean degree) — no scale-free hub.
+  measure:
+    kind: flat
+    observable: max_degree
+    reduce: last
+  pass_if:
+    op: at_most
+    value: 16
+  units: edges
+  requires_simulation: 'yes'
+  cites:
+  - erdos1960evolution
+bibliography:
+  bib_keys:
+  - erdos1960evolution
+  - newman2003structure
+findings:
+- name: erdos_renyi-signature
+  summary: Random growth produces a homogeneous, hub-free network (Poisson-like degrees) — the null baseline
+    the structured rules are read against.
+  detail: Random growth gives a connected but hub-free graph; the degree spread is narrow, establishing
+    the null against which preferential attachment's hubs stand out.
+report:
+  verdict: Random growth produces a homogeneous, hub-free network (Poisson-like degrees) — the null baseline
+    the structured rules are read against.
+  verdict_status: passed
+  verdict_detail: Random growth gives a connected but hub-free graph; the degree spread is narrow, establishing
+    the null against which preferential attachment's hubs stand out.

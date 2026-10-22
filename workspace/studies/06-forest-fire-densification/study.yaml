@@ -1,0 +1,105 @@
+schema_version: 4
+name: 06-forest-fire-densification
+title: Forest-fire growth & densification
+created: '2026-10-22'
+status: completed
+investigation: dynamic-networks
+phase: Decide
+question: 'Does recursive forest-fire burning densify the network over time?
+
+  '
+hypothesis: 'Because each arrival can ignite many links, the edge count grows super-linearly in the node
+  count — the network densifies and its mean degree rises.
+
+  '
+objective: 'Run the forest_fire reaction and show how it reconfigures the network, measuring its signature
+  structural observables.
+
+  '
+description: 'Forest-fire growth densifies the network: mean degree rises as the graph grows, reproducing
+  the densification law.
+
+
+  The network is stored as process-bigraph node/edge maps and reconfigured each step by the `forest_fire`
+  reaction (emitting _add/_remove structural sentinels). The animation and GIF in viz/ show the evolution;
+  scalar metrics are emitted for the behavior tests.
+
+  '
+claim: 'Forest-fire growth densifies the network: mean degree rises as the graph grows, reproducing the
+  densification law.'
+confidence: Accepted
+parent_studies:
+- study: 01-erdos-renyi-random-growth
+  relation: builds-on
+baseline:
+- name: baseline
+  composite: viva_dynamic_networks.composites.family_a.forest_fire
+  params:
+    p_forward: 0.4
+    max_nodes: 60.0
+    max_links: 12.0
+    seed: 7.0
+visualizations:
+- name: network-evolution
+  address: local:NetworkEvolution
+  config:
+    title: Forest-fire growth & densification
+    layout: spring
+    color_by: degree
+    subtitle: a new node 'burns' recursively outward, linking to a sampled subset of neighbours
+    composite: viva_dynamic_networks.composites.family_a.forest_fire
+    n_steps: 57
+    render_mode: end
+expected_behavior:
+- name: ff-densifies
+  observable: mean_degree
+  condition: mean degree rises as nodes accumulate (densification)
+  rationale: Recursive burning adds a super-linear number of edges per arrival.
+- name: ff-connected
+  observable: largest_component_fraction
+  condition: the graph stays connected
+  rationale: Every arrival links into the existing burned region.
+behavior_tests:
+- name: ff-densification
+  classification: quantitative
+  description: Mean degree increases from start to end (densification).
+  measure:
+    kind: flat
+    observable: mean_degree
+    reduce: last
+  pass_if:
+    op: at_least
+    value: 3.0
+  units: edges
+  requires_simulation: 'yes'
+  cites:
+  - leskovec2007graph
+- name: ff-connected
+  classification: quantitative
+  description: The network stays connected.
+  measure:
+    kind: flat
+    observable: largest_component_fraction
+    reduce: last
+  pass_if:
+    op: at_least
+    value: 0.99
+  units: fraction
+  requires_simulation: 'yes'
+  cites:
+  - leskovec2007graph
+bibliography:
+  bib_keys:
+  - leskovec2007graph
+findings:
+- name: forest_fire-signature
+  summary: 'Forest-fire growth densifies the network: mean degree rises as the graph grows, reproducing
+    the densification law.'
+  detail: Mean degree climbs as the graph grows — the densification signature Leskovec et al. identified,
+    which random and BA growth (fixed edges-per-node) do not show.
+report:
+  verdict: 'Forest-fire growth densifies the network: mean degree rises as the graph grows, reproducing
+    the densification law.'
+  verdict_status: passed
+  verdict_detail: Mean degree climbs as the graph grows — the densification signature Leskovec et al.
+    identified, which random and BA growth (fixed edges-per-node) do not show.

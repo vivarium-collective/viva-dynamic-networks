@@ -15,6 +15,7 @@ from __future__ import annotations
 
 from process_bigraph.composite_generator import composite_generator
 
+from ..core import register_all
 from ..graph_init import activity_nodes, labelled_nodes, ring_lattice, seed_clique
 
 # metric store paths the ParquetEmitter persists (every behavior-test observable)
@@ -86,6 +87,7 @@ def _build(rule, nodes, edges, rule_params, seed):
         "seed": {"type": "float", "default": 0.0, "description": "RNG seed"},
     },
     emitters=_PARQUET,
+    core_extensions=[register_all],
 )
 def erdos_renyi(core=None, *, p=0.08, max_nodes=60.0, seed=0.0):
     nodes, edges = seed_clique(2)
@@ -106,6 +108,7 @@ def erdos_renyi(core=None, *, p=0.08, max_nodes=60.0, seed=0.0):
         "seed": {"type": "float", "default": 0.0, "description": "RNG seed"},
     },
     emitters=_PARQUET,
+    core_extensions=[register_all],
 )
 def preferential_attachment(core=None, *, m=2.0, max_nodes=60.0, seed=0.0):
     nodes, edges = seed_clique(3)
@@ -126,6 +129,7 @@ def preferential_attachment(core=None, *, m=2.0, max_nodes=60.0, seed=0.0):
         "seed": {"type": "float", "default": 0.0, "description": "RNG seed"},
     },
     emitters=_PARQUET,
+    core_extensions=[register_all],
 )
 def fitness_attachment(core=None, *, m=2.0, max_nodes=60.0, seed=0.0):
     nodes, edges = seed_clique(3)
@@ -148,6 +152,7 @@ def fitness_attachment(core=None, *, m=2.0, max_nodes=60.0, seed=0.0):
         "seed": {"type": "float", "default": 0.0, "description": "RNG seed"},
     },
     emitters=_PARQUET,
+    core_extensions=[register_all],
 )
 def duplication_divergence(core=None, *, q=0.5, p=0.1, max_nodes=60.0, seed=0.0):
     nodes, edges = seed_clique(3)
@@ -169,6 +174,7 @@ def duplication_divergence(core=None, *, q=0.5, p=0.1, max_nodes=60.0, seed=0.0)
         "seed": {"type": "float", "default": 0.0, "description": "RNG seed"},
     },
     emitters=_PARQUET,
+    core_extensions=[register_all],
 )
 def forest_fire(core=None, *, p_forward=0.37, max_nodes=60.0, max_links=12.0,
                 seed=0.0):
@@ -196,6 +202,7 @@ def forest_fire(core=None, *, p_forward=0.37, max_nodes=60.0, max_links=12.0,
         "seed": {"type": "float", "default": 0.0, "description": "RNG seed"},
     },
     emitters=_PARQUET,
+    core_extensions=[register_all],
 )
 def small_world_rewire(core=None, *, p=0.12, n=28.0, k=4.0, seed=0.0):
     nodes, edges = ring_lattice(int(n), int(k))
@@ -215,6 +222,7 @@ def small_world_rewire(core=None, *, p=0.12, n=28.0, k=4.0, seed=0.0):
         "seed": {"type": "float", "default": 0.0, "description": "RNG seed"},
     },
     emitters=_PARQUET,
+    core_extensions=[register_all],
 )
 def adaptive_rewire(core=None, *, w=0.6, n=40.0, k=4.0, seed=0.0):
     nodes, edges = labelled_nodes(int(n), int(k), seed=int(seed))
@@ -233,6 +241,7 @@ def adaptive_rewire(core=None, *, w=0.6, n=40.0, k=4.0, seed=0.0):
         "seed": {"type": "float", "default": 0.0, "description": "RNG seed"},
     },
     emitters=_PARQUET,
+    core_extensions=[register_all],
 )
 def activity_driven(core=None, *, m=1.0, n=40.0, seed=0.0):
     nodes, edges = activity_nodes(int(n), seed=int(seed))

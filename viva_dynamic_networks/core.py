@@ -134,6 +134,20 @@ def _chain_installed_module_cores(core):
     return core
 
 
+def register_all(core):
+    """Register this workspace's types + own processes into ``core``.
+
+    A ``(core) -> core`` callable suitable for a composite generator's
+    ``core_extensions=[...]`` — the dashboard's Composites drill-in builds each
+    generator against a bare core, which would otherwise fail to resolve
+    ``map[dynamic_node]`` / ``local:NetworkDynamicsProcess``.
+    """
+    from .types import register_types
+    register_types(core)
+    register_workspace_processes(core)
+    return core
+
+
 def build_core(core=None):
     """Return a process-bigraph core with this workspace's processes registered.
 

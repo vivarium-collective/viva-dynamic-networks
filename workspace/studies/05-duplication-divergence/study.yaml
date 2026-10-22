@@ -1,0 +1,107 @@
+schema_version: 4
+name: 05-duplication-divergence
+title: Duplication–divergence (biological growth)
+created: '2026-10-22'
+status: completed
+investigation: dynamic-networks
+phase: Decide
+question: 'Does genome-style duplication-and-divergence reproduce protein-network topology?
+
+  '
+hypothesis: 'Copying a random node''s neighbourhood and pruning edges yields a heavy-tailed, locally clustered
+  network like observed protein-interaction graphs.
+
+  '
+objective: 'Run the duplication_divergence reaction and show how it reconfigures the network, measuring
+  its signature structural observables.
+
+  '
+description: 'Copy-then-diverge growth reproduces the heavy-tailed, locally clustered topology seen in
+  protein-interaction networks.
+
+
+  The network is stored as process-bigraph node/edge maps and reconfigured each step by the `duplication_divergence`
+  reaction (emitting _add/_remove structural sentinels). The animation and GIF in viz/ show the evolution;
+  scalar metrics are emitted for the behavior tests.
+
+  '
+claim: Copy-then-diverge growth reproduces the heavy-tailed, locally clustered topology seen in protein-interaction
+  networks.
+confidence: Accepted
+parent_studies:
+- study: 01-erdos-renyi-random-growth
+  relation: builds-on
+baseline:
+- name: baseline
+  composite: viva_dynamic_networks.composites.family_a.duplication_divergence
+  params:
+    q: 0.55
+    p: 0.1
+    max_nodes: 60.0
+    seed: 7.0
+visualizations:
+- name: network-evolution
+  address: local:NetworkEvolution
+  config:
+    title: Duplication–divergence (biological growth)
+    layout: spring
+    color_by: degree
+    subtitle: a new node copies a neighbour's edges, then sheds each with probability 1−q
+    composite: viva_dynamic_networks.composites.family_a.duplication_divergence
+    n_steps: 57
+    render_mode: end
+expected_behavior:
+- name: dd-heavy-tail
+  observable: max_degree
+  condition: a heavy-tailed degree distribution emerges
+  rationale: Duplicates of high-degree nodes inherit many edges, reinforcing hubs.
+- name: dd-clustering
+  observable: clustering
+  condition: local clustering is elevated vs a random graph
+  rationale: A duplicate shares neighbours with its template, closing triangles.
+behavior_tests:
+- name: dd-hub-forms
+  classification: quantitative
+  description: A heavy-tailed hub forms (max degree ≥6).
+  measure:
+    kind: flat
+    observable: max_degree
+    reduce: last
+  pass_if:
+    op: at_least
+    value: 6
+  units: edges
+  requires_simulation: 'yes'
+  cites:
+  - vazquez2003modeling
+  - ispolatov2005duplication
+- name: dd-clustered
+  classification: quantitative
+  description: Average clustering is non-trivial (≥0.1).
+  measure:
+    kind: flat
+    observable: clustering
+    reduce: last
+  pass_if:
+    op: at_least
+    value: 0.1
+  units: coefficient
+  requires_simulation: 'yes'
+  cites:
+  - ispolatov2005duplication
+bibliography:
+  bib_keys:
+  - vazquez2003modeling
+  - ispolatov2005duplication
+findings:
+- name: duplication_divergence-signature
+  summary: Copy-then-diverge growth reproduces the heavy-tailed, locally clustered topology seen in protein-interaction
+    networks.
+  detail: Duplication reinforces hubs while the shared-neighbour mechanism raises clustering above a random
+    graph — the combination that distinguishes biological growth from BA.
+report:
+  verdict: Copy-then-diverge growth reproduces the heavy-tailed, locally clustered topology seen in protein-interaction
+    networks.
+  verdict_status: passed
+  verdict_detail: Duplication reinforces hubs while the shared-neighbour mechanism raises clustering above
+    a random graph — the combination that distinguishes biological growth from BA.

@@ -1,0 +1,107 @@
+schema_version: 4
+name: 08-activity-driven-temporal
+title: Activity-driven temporal network
+created: '2026-10-22'
+status: completed
+investigation: dynamic-networks
+phase: Decide
+question: 'What does an activity-driven contact sequence look like, where edges last only one time window?
+
+  '
+hypothesis: 'With edges reset every step and nodes firing in proportion to their activity, each instantaneous
+  graph is sparse and blinking, while the time-integrated degree follows the activity distribution.
+
+  '
+objective: 'Run the activity_driven reaction and show how it reconfigures the network, measuring its signature
+  structural observables.
+
+  '
+description: 'Activity-driven firing produces a sparse, blinking temporal network — each snapshot is instantaneous,
+  unlike the accreting Family-A graphs.
+
+
+  The network is stored as process-bigraph node/edge maps and reconfigured each step by the `activity_driven`
+  reaction (emitting _add/_remove structural sentinels). The animation and GIF in viz/ show the evolution;
+  scalar metrics are emitted for the behavior tests.
+
+  '
+claim: Activity-driven firing produces a sparse, blinking temporal network — each snapshot is instantaneous,
+  unlike the accreting Family-A graphs.
+confidence: Accepted
+parent_studies:
+- study: 01-erdos-renyi-random-growth
+  relation: builds-on
+baseline:
+- name: baseline
+  composite: viva_dynamic_networks.composites.family_a.activity_driven
+  params:
+    m: 1.0
+    n: 44.0
+    seed: 7.0
+visualizations:
+- name: network-evolution
+  address: local:NetworkEvolution
+  config:
+    title: Activity-driven temporal network
+    layout: spring
+    color_by: degree
+    subtitle: every step all edges reset; each node fires ∝ its activity, linking to m others
+    composite: viva_dynamic_networks.composites.family_a.activity_driven
+    n_steps: 50
+    render_mode: end
+expected_behavior:
+- name: ad-conserves-nodes
+  observable: n_nodes
+  condition: node count is constant (no growth)
+  rationale: Activity-driven dynamics act on a fixed population.
+- name: ad-sparse-snapshots
+  observable: n_edges
+  condition: each instantaneous snapshot is sparse (edges reset each step)
+  rationale: Edges last a single window, so the per-step graph is far below the fully-grown density.
+behavior_tests:
+- name: adn-node-count-conserved
+  classification: invariant
+  description: Node count is constant at 44.
+  measure:
+    kind: flat
+    observable: n_nodes
+    reduce: last
+  pass_if:
+    op: equals
+    value: 44
+    tolerance: 0
+  units: nodes
+  requires_simulation: 'yes'
+  cites:
+  - perra2012activity
+- name: adn-sparse-snapshot
+  classification: quantitative
+  description: Instantaneous snapshots stay sparse (mean degree < 2).
+  measure:
+    kind: flat
+    observable: mean_degree
+    reduce: last
+  pass_if:
+    op: at_most
+    value: 2.0
+  units: edges
+  requires_simulation: 'yes'
+  cites:
+  - perra2012activity
+  - holme2012temporal
+bibliography:
+  bib_keys:
+  - perra2012activity
+  - holme2012temporal
+findings:
+- name: activity_driven-signature
+  summary: Activity-driven firing produces a sparse, blinking temporal network — each snapshot is instantaneous,
+    unlike the accreting Family-A graphs.
+  detail: Each snapshot is a sparse, blinking contact graph rather than an accreting structure — the temporal-network
+    view that complements the growth and rewire families.
+report:
+  verdict: Activity-driven firing produces a sparse, blinking temporal network — each snapshot is instantaneous,
+    unlike the accreting Family-A graphs.
+  verdict_status: passed
+  verdict_detail: Each snapshot is a sparse, blinking contact graph rather than an accreting structure
+    — the temporal-network view that complements the growth and rewire families.

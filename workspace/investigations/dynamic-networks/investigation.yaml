@@ -1,0 +1,134 @@
+schema_version: 2
+name: dynamic-networks
+title: Dynamic Networks — a catalog of network-reconfiguring rules
+created: '2026-10-22'
+status: running
+question: 'How do different local rules reshape a network over time, and can a single process-bigraph
+  process — driven by pluggable reactions — reproduce the canonical families of network dynamics, each
+  with a clear visualization of the network evolving?
+
+  '
+hypothesis: 'One generalized NetworkDynamicsProcess, reconfiguring a graph through process-bigraph _add/_remove
+  structural reactions, can reproduce the signature topology of every classic dynamic-network model —
+  random growth, preferential attachment, small-world rewiring, fitness, duplication-divergence, forest-fire,
+  adaptive coevolution, and activity-driven temporal networks — distinguishable by emitted structural
+  metrics and by eye in the animations.
+
+  '
+description: 'This investigation is a catalog: each study instantiates the same generalized process with
+  a different registered reaction and shows the network evolving under that rule as an interactive animation
+  and a GIF. Family A (studies 1–8) covers the dynamics OF networks — rules that rewire topology. A later
+  Family B will add continuous multi-species dynamics ON the networks (an SBML simulator at each node
+  via viva-copasi, with transport/diffusion along edges).
+
+  '
+lead: 'Network science has many models of how graphs grow and rewire, usually studied one at a time. Here
+  they become a single reusable machine: a process-bigraph process whose structural reactions are swapped
+  to produce each dynamic, so the whole family is directly comparable — same substrate, same metrics,
+  same visualization — and extensible with one new reaction per new rule.
+
+  '
+executive:
+  what_is_this: 'A catalog investigation: eight studies, each a different network-reconfiguring rule implemented
+    as a process-bigraph reaction on a shared graph substrate, each with an evolving-network animation
+    and GIF.'
+  verdict: A single generalized NetworkDynamicsProcess reproduces all eight canonical Family-A dynamics;
+    every study's structural signature passes its behavior checks.
+  verdict_status: passed
+  verdict_detail: 'All 8 Family-A studies pass: ER stays hub-free and connected; BA and fitness build
+    dominant hubs with heavy tails; WS and adaptive conserve edges while reorganising; duplication-divergence
+    reproduces heavy-tailed, clustered (and fragmenting) topology; forest-fire densifies; activity-driven
+    stays sparse and blinking. The architecture is one process + a pluggable reaction registry.'
+  decisions_needed:
+  - question: Proceed to Family B (SBML-at-nodes via viva-copasi, with inter-node transport)?
+    context: Family A is complete and green. Family B adds continuous multi-species node dynamics ON these
+      networks.
+scientific_argument:
+  main_claim: Classic network-dynamics models are special cases of one generalized, reaction-driven process;
+    each is recovered by registering a local rewrite rule, with no change to the process, composites,
+    or dashboard.
+  evidence_for:
+  - All 8 rules run end-to-end as process-bigraph _add/_remove structural reactions on a shared node/edge
+    substrate.
+  - 'Each study''s structural signature matches theory: BA/fitness hubs (max degree ≫ mean), WS/adaptive
+    edge conservation, forest-fire densification, activity-driven sparsity.'
+  - Adding a new dynamic is a single registered reaction function — demonstrated by the breadth of the
+    catalog.
+  evidence_against:
+  - The power-law exponent MLE is biased low at N≈60 (finite-size); precise exponents need far larger
+    graphs.
+  - Rules are faithful minimal implementations, not exhaustive variants (e.g. no non-linear PA, no aging).
+  key_figures:
+  - 02-preferential-attachment/viz/preferential_attachment.gif (hub emergence)
+  - 03-small-world-rewiring/viz/small_world_rewire.gif (ring → small world)
+  - 07-adaptive-coevolution/viz/adaptive_rewire.gif (opinion segregation)
+  caveats:
+  - Finite-size effects on degree-distribution exponents.
+  - Metrics are single-seed per study (seed 7); trends are robust but not ensemble-averaged.
+biological_story: 'Networks are everywhere in biology — protein interactions, gene regulation, metabolism,
+  neurons, ecological webs — and they are not static. This investigation treats the *rules* that reshape
+  a network as the object of study. Duplication-divergence (study 5) is the explicit genome-evolution
+  analogue: a gene duplicates, the copy inherits its partners, then diverges by losing some — reproducing
+  the heavy-tailed, clustered topology of real protein-interaction networks. Preferential attachment and
+  fitness capture how some nodes become hubs. Adaptive coevolution (study 7) is the conceptual bridge
+  to the next phase: when the state ON the nodes feeds back on the wiring between them. Family B will
+  make that feedback quantitative, placing an SBML reaction network in every node and letting species
+  diffuse along the edges.
+
+  '
+at_a_glance:
+- study: 01-erdos-renyi-random-growth
+  role: Null baseline — random growth, no hubs (Poisson degrees).
+- study: 02-preferential-attachment
+  role: Degree-proportional growth → scale-free hubs (Barabási–Albert).
+- study: 03-small-world-rewiring
+  role: Ring-lattice rewiring → small-world regime (Watts–Strogatz).
+- study: 04-fitness-condensation
+  role: Fitness-weighted growth → a latecomer can overtake old hubs (Bianconi–Barabási).
+- study: 05-duplication-divergence
+  role: Copy-then-diverge → protein-network-like topology.
+- study: 06-forest-fire-densification
+  role: Recursive burning → densification + shrinking diameter (Leskovec).
+- study: 07-adaptive-coevolution
+  role: Opinions + rewiring co-adapt → like-minded clusters (Gross–Blasius); bridge to Family B.
+- study: 08-activity-driven-temporal
+  role: Activity-driven firing → a blinking temporal network (Perra).
+studies:
+- 01-erdos-renyi-random-growth
+- 02-preferential-attachment
+- 03-small-world-rewiring
+- 04-fitness-condensation
+- 05-duplication-divergence
+- 06-forest-fire-densification
+- 07-adaptive-coevolution
+- 08-activity-driven-temporal
+acceptance_criteria:
+- study: 01-erdos-renyi-random-growth
+  behavior: er-giant-component
+- study: 02-preferential-attachment
+  behavior: ba-hub-emerges
+- study: 03-small-world-rewiring
+  behavior: sw-edge-count-conserved
+- study: 04-fitness-condensation
+  behavior: fit-hub-emerges
+- study: 05-duplication-divergence
+  behavior: dd-hub-forms
+- study: 06-forest-fire-densification
+  behavior: ff-densification
+- study: 07-adaptive-coevolution
+  behavior: ad-edge-count-conserved
+- study: 08-activity-driven-temporal
+  behavior: adn-sparse-snapshot
+expert_docs: []
+glossary:
+- term: reaction (process-bigraph)
+  definition: A structural rewrite of the bigraph emitted as _add/_remove sentinels on a map port; here
+    it adds/removes network nodes and edges.
+- term: degree
+  definition: Number of edges incident to a node.
+- term: scale-free
+  definition: A network whose degree distribution has a power-law tail — a few very-high-degree hubs.
+- term: small-world
+  definition: High local clustering with short global path lengths.
+- term: densification
+  definition: Edge count growing super-linearly in node count as a network evolves.

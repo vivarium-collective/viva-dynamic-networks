@@ -1,0 +1,106 @@
+schema_version: 4
+name: 04-fitness-condensation
+title: Bianconi–Barabási fitness attachment
+created: '2026-10-22'
+status: completed
+investigation: dynamic-networks
+phase: Decide
+question: 'Can an intrinsic node fitness let a latecomer overtake older, higher-degree nodes?
+
+  '
+hypothesis: 'Weighting attachment by fitness×degree still produces hubs, but the leading hub need not
+  be the oldest node — fitness breaks the pure first-mover advantage.
+
+  '
+objective: 'Run the fitness_attachment reaction and show how it reconfigures the network, measuring its
+  signature structural observables.
+
+  '
+description: 'Fitness-weighted attachment still builds hubs, but a high-fitness latecomer can overtake
+  older nodes — unlike pure Barabási–Albert.
+
+
+  The network is stored as process-bigraph node/edge maps and reconfigured each step by the `fitness_attachment`
+  reaction (emitting _add/_remove structural sentinels). The animation and GIF in viz/ show the evolution;
+  scalar metrics are emitted for the behavior tests.
+
+  '
+claim: Fitness-weighted attachment still builds hubs, but a high-fitness latecomer can overtake older
+  nodes — unlike pure Barabási–Albert.
+confidence: Accepted
+parent_studies:
+- study: 01-erdos-renyi-random-growth
+  relation: builds-on
+baseline:
+- name: baseline
+  composite: viva_dynamic_networks.composites.family_a.fitness_attachment
+  params:
+    m: 2.0
+    max_nodes: 60.0
+    seed: 7.0
+visualizations:
+- name: network-evolution
+  address: local:NetworkEvolution
+  config:
+    title: Bianconi–Barabási fitness attachment
+    layout: spring
+    color_by: degree
+    subtitle: attachment ∝ fitness × degree — a fit latecomer can overtake old hubs
+    composite: viva_dynamic_networks.composites.family_a.fitness_attachment
+    n_steps: 58
+    render_mode: end
+expected_behavior:
+- name: fit-forms-hubs
+  observable: max_degree
+  condition: hubs form as in BA
+  rationale: Fitness modulates, but does not remove, preferential attachment.
+- name: fit-latecomer
+  observable: max_degree
+  condition: the leading hub is not necessarily the earliest node
+  rationale: High fitness compensates for a late start (fit-get-richer).
+behavior_tests:
+- name: fit-hub-emerges
+  classification: quantitative
+  description: A dominant hub forms (max degree ≥10).
+  measure:
+    kind: flat
+    observable: max_degree
+    reduce: last
+  pass_if:
+    op: at_least
+    value: 10
+  units: edges
+  requires_simulation: 'yes'
+  cites:
+  - bianconi2001competition
+  - albert2002statistical
+- name: fit-connected
+  classification: quantitative
+  description: The network stays connected.
+  measure:
+    kind: flat
+    observable: largest_component_fraction
+    reduce: last
+  pass_if:
+    op: at_least
+    value: 0.99
+  units: fraction
+  requires_simulation: 'yes'
+  cites:
+  - bianconi2001competition
+bibliography:
+  bib_keys:
+  - bianconi2001competition
+  - albert2002statistical
+findings:
+- name: fitness_attachment-signature
+  summary: Fitness-weighted attachment still builds hubs, but a high-fitness latecomer can overtake older
+    nodes — unlike pure Barabási–Albert.
+  detail: Hubs emerge as in BA, but the leading hub's identity is fitness-driven rather than purely age-driven
+    — the fit-get-richer effect.
+report:
+  verdict: Fitness-weighted attachment still builds hubs, but a high-fitness latecomer can overtake older
+    nodes — unlike pure Barabási–Albert.
+  verdict_status: passed
+  verdict_detail: Hubs emerge as in BA, but the leading hub's identity is fitness-driven rather than purely
+    age-driven — the fit-get-richer effect.

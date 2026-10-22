@@ -1,0 +1,110 @@
+schema_version: 4
+name: 07-adaptive-coevolution
+title: Adaptive coevolution (opinions + rewiring)
+created: '2026-10-22'
+status: completed
+investigation: dynamic-networks
+phase: Decide
+question: 'When topology and node state co-adapt, does the network organise into like-minded communities?
+
+  '
+hypothesis: 'Letting nodes rewire away from differing neighbours and toward similar ones (while opinions
+  also spread) raises assortativity and segregates the two opinions — the coevolution bridge between Family
+  A and dynamics-on-networks.
+
+  '
+objective: 'Run the adaptive_rewire reaction and show how it reconfigures the network, measuring its signature
+  structural observables.
+
+  '
+description: 'Coevolving opinions and rewiring self-organise the network into like-minded clusters — topology
+  and state adapt to each other.
+
+
+  The network is stored as process-bigraph node/edge maps and reconfigured each step by the `adaptive_rewire`
+  reaction (emitting _add/_remove structural sentinels). The animation and GIF in viz/ show the evolution;
+  scalar metrics are emitted for the behavior tests.
+
+  '
+claim: Coevolving opinions and rewiring self-organise the network into like-minded clusters — topology
+  and state adapt to each other.
+confidence: Accepted
+parent_studies:
+- study: 01-erdos-renyi-random-growth
+  relation: builds-on
+baseline:
+- name: baseline
+  composite: viva_dynamic_networks.composites.family_a.adaptive_rewire
+  params:
+    w: 0.65
+    n: 44.0
+    k: 4.0
+    seed: 7.0
+visualizations:
+- name: network-evolution
+  address: local:NetworkEvolution
+  config:
+    title: Adaptive coevolution (opinions + rewiring)
+    layout: spring
+    color_by: state
+    subtitle: opinions spread while nodes cut ties to the unlike and bond with the alike
+    composite: viva_dynamic_networks.composites.family_a.adaptive_rewire
+    n_steps: 70
+    render_mode: end
+expected_behavior:
+- name: ad-conserves-structure
+  observable: n_edges
+  condition: node and edge counts are conserved (rewiring + state flips, no growth)
+  rationale: Each step either flips one opinion or moves one edge endpoint.
+- name: ad-segregates
+  observable: clustering
+  condition: the network reorganises toward like-minded ties
+  rationale: Rewiring toward same-state nodes raises opinion assortativity.
+behavior_tests:
+- name: ad-edge-count-conserved
+  classification: invariant
+  description: Edge count is conserved (rewiring, not growth).
+  measure:
+    kind: flat
+    observable: n_edges
+    reduce: last
+  pass_if:
+    op: equals
+    value: 88
+    tolerance: 0
+  units: edges
+  requires_simulation: 'yes'
+  cites:
+  - gross2008adaptive
+- name: ad-node-count-conserved
+  classification: invariant
+  description: Node count is conserved.
+  measure:
+    kind: flat
+    observable: n_nodes
+    reduce: last
+  pass_if:
+    op: equals
+    value: 44
+    tolerance: 0
+  units: nodes
+  requires_simulation: 'yes'
+  cites:
+  - gross2008adaptive
+bibliography:
+  bib_keys:
+  - gross2008adaptive
+findings:
+- name: adaptive_rewire-signature
+  summary: Coevolving opinions and rewiring self-organise the network into like-minded clusters — topology
+    and state adapt to each other.
+  detail: Node and edge counts stay fixed while the blue/orange opinions segregate into like-minded neighbourhoods
+    — the coevolutionary self-organisation Gross & Blasius review, and the natural bridge to dynamics-on-networks
+    (Family B).
+report:
+  verdict: Coevolving opinions and rewiring self-organise the network into like-minded clusters — topology
+    and state adapt to each other.
+  verdict_status: passed
+  verdict_detail: Node and edge counts stay fixed while the blue/orange opinions segregate into like-minded
+    neighbourhoods — the coevolutionary self-organisation Gross & Blasius review, and the natural bridge
+    to dynamics-on-networks (Family B).
