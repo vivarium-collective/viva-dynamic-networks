@@ -21,6 +21,9 @@ dependencies = [
     # Extracted from viva-template as of v0.4.16; provides the `vivarium-workbench
     # serve` CLI invoked by scripts/serve.sh.
     "vivarium-workbench",
+    "networkx>=3.6.1",
+    "imageio>=2.38.1",
+    "pillow>=13.0.0",
 ]
 
 [project.optional-dependencies]

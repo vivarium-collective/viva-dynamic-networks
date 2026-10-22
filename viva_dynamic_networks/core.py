@@ -147,6 +147,13 @@ def build_core(core=None):
     """
     if core is None:
         core = allocate_core()
+    # Register this workspace's custom types (dynamic_node / dynamic_edge)
+    # before processes/composites that reference them in their port schemas.
+    try:
+        from .types import register_types
+        register_types(core)
+    except Exception:
+        pass
     register_workspace_processes(core)
     _chain_installed_module_cores(core)
     return core
