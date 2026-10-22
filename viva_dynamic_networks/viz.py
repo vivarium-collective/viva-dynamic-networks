@@ -265,7 +265,8 @@ def render_gif(frames: List[Frame], positions: Pos, out_path, *, title: str = ""
         plt.close(fig)
     if images:
         images += [images[-1]] * hold  # hold the final frame
-    imageio.mimsave(str(out_path), images, fps=fps, loop=0)
+    # imageio v2 wants per-frame duration in ms (fps is deprecated).
+    imageio.mimsave(str(out_path), images, duration=1000.0 / max(fps, 1), loop=0)
     return str(out_path)
 
 

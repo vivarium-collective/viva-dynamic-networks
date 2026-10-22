@@ -19,6 +19,7 @@ from __future__ import annotations
 import numpy as np
 from process_bigraph import Process
 
+from .metrics import graph_metrics
 from .reactions import GraphView, get_reaction
 
 
@@ -87,3 +88,47 @@ class NetworkDynamicsProcess(Process):
             update["edges"] = edges_u
 
         return update
+
+
+class NetworkMetrics(Process):
+    """Derive scalar graph metrics each step → a persistable observable series.
+
+    Reads the live ``nodes`` / ``edges`` maps and writes absolute scalar
+    readings (so the ports are ``overwrite[float]`` — they are sensor values, not
+    deltas). A ParquetEmitter on the ``metrics`` store makes a study's
+    ``behavior_tests`` evaluable (e.g. final ``mean_degree`` or
+    ``largest_component_fraction``). ``with_nx`` adds clustering (networkx).
+    """
+
+    config_schema = {
+        "directed": {"_type": "boolean", "_default": False},
+        "with_nx": {"_type": "boolean", "_default": True},
+    }
+
+    def inputs(self):
+        return {"nodes": "map[dynamic_node]", "edges": "map[dynamic_edge]"}
+
+    def outputs(self):
+        return {
+            "n_nodes": "overwrite[float]",
+            "n_edges": "overwrite[float]",
+            "mean_degree": "overwrite[float]",
+            "max_degree": "overwrite[float]",
+            "density": "overwrite[float]",
+            "largest_component_fraction": "overwrite[float]",
+            "clustering": "overwrite[float]",
+        }
+
+    def update(self, state, interval):
+        m = graph_metrics(state.get("nodes", {}) or {},
+                          state.get("edges", {}) or {},
+                          with_nx=bool(self.config.get("with_nx", True)))
+        return {
+            "n_nodes": float(m["n_nodes"]),
+            "n_edges": float(m["n_edges"]),
+            "mean_degree": float(m["mean_degree"]),
+            "max_degree": float(m["max_degree"]),
+            "density": float(m["density"]),
+            "largest_component_fraction": float(m["largest_component_fraction"]),
+            "clustering": float(m["clustering"] or 0.0),
+        }
