@@ -825,7 +825,8 @@ a.viv-bs-commit:hover { text-decoration: underline; }
 
     <!-- Brand: fixed Vivarium logo + name (no per-workspace icon/name override). -->
     <div class="viv-rail-header">
-      <a class="viv-rail-brand-link" href="#about" title="About Vivarium Workbench">
+      <a class="viv-rail-brand-link" href="#about" title="About Vivarium Workbench"
+         onclick="window.location.hash='#about'; if(window._switchPage){_switchPage('about');}">
         <img class="viv-rail-logo" src="assets/vivarium-logo.png" alt="Vivarium" loading="lazy"
              data-light-src="assets/vivarium-logo.png"
              data-dark-src="assets/vivarium-logo-dark.png"
@@ -836,17 +837,14 @@ a.viv-bs-commit:hover { text-decoration: underline; }
         </div>
       </a>
       <!-- Global search moved to a "Search" nav tab above Resources (see below);
-           the header now holds only the collapse toggle. ⌘K still opens search. -->
-      <!-- Rail collapse/expand toggle. Lives in the header so, when collapsed, it
-           can overlay the logo and reveal on hover (see .viv-rail-collapsed CSS). -->
-      <button class="viv-rail-toggle" id="viv-rail-toggle" type="button" aria-label="Collapse sidebar" title="Collapse sidebar" onclick="_vivToggleRail()">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" class="viv-rail-toggle-svg">
-          <rect x="3" y="4" width="18" height="16" rx="2"/>
-          <line x1="9" y1="4" x2="9" y2="20"/>
-        </svg>
-      </button>
+           ⌘K still opens search. The collapse/expand TOGGLE button was removed —
+           drag the rail's right edge to widen it, or drag it narrow to collapse
+           to the icon bar (see the resize handle below). -->
     </div>
 
+    
+    <!-- GitHub mark, defined once and reused (workspace-name link + collapsed icon). -->
+    <svg width="0" height="0" style="position:absolute" aria-hidden="true"><symbol id="viv-gh-mark" viewBox="0 0 16 16"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0016 8c0-4.42-3.58-8-8-8z"/></symbol></svg>
     
 
     <div class="viv-workspace-switcher" id="viv-workspace-switcher">
@@ -859,7 +857,7 @@ a.viv-bs-commit:hover { text-decoration: underline; }
           <span class="viv-wsp-dot viv-wsp-ready">●</span>
           <span class="viv-wsp-trigger-names">
             <strong>dynamic-networks</strong>
-            <span class="viv-wsp-trigger-branch" title="branch: main">main</span>
+            <span class="viv-wsp-trigger-branch" title="branch: dynamic-networks">dynamic-networks</span>
           </span>
         </span>
         <span class="viv-wsp-trigger-caret" aria-hidden="true">▾</span>
@@ -876,15 +874,25 @@ a.viv-bs-commit:hover { text-decoration: underline; }
       <span class="viv-workspace-switcher-glyph">●</span>
       <strong>dynamic-networks</strong>
       
+      <a class="viv-ws-repo-link" href="https://github.com/vivarium-collective/viva-dynamic-networks" target="_blank" rel="noopener"
+         title="Open dynamic-networks on GitHub" onclick="event.stopPropagation()">
+        <svg class="viv-ws-gh-mark" width="12" height="12"><use href="#viv-gh-mark"/></svg></a>
+      
     </div>
 
+    
+    <!-- Collapsed rail: a single centered GitHub mark linking to the repo. -->
+    <a class="viv-rail-repo-mini" href="https://github.com/vivarium-collective/viva-dynamic-networks" target="_blank" rel="noopener"
+       title="Open dynamic-networks on GitHub" aria-label="GitHub repository">
+      <svg width="16" height="16"><use href="#viv-gh-mark"/></svg>
+    </a>
     
     <script>
       /* The workspace's own repo identity — the Registry's Repositories facet
          uses these to merge workspace-local artifacts under one repo card and
          to link it to its real GitHub URL. */
       window._workspaceName = "dynamic-networks";
-      window._workspaceRepoUrl = "";
+      window._workspaceRepoUrl = "https://github.com/vivarium-collective/viva-dynamic-networks";
     </script>
 
     <!-- Everything from the Workspace nav down scrolls as ONE region, so a long
@@ -909,6 +917,42 @@ a.viv-bs-commit:hover { text-decoration: underline; }
           </svg>
         </span>
         <span class="viv-rail-link-label">Search</span>
+      </a>
+      <!-- Investigations: the overview page — and the DEFAULT landing view on
+           workbench load ('investigations', set in walkthrough.js). Moved to the
+           TOP of the nav, directly under Search. Branching-fan (DAG) icon. -->
+      <a href="#investigations"    class="viv-rail-link menu-link" data-page="investigations">
+        <span class="viv-rail-link-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" class="viv-rail-link-svg">
+            <rect x="2.5" y="9" width="6" height="6"/>
+            <rect x="16" y="3" width="5.5" height="4"/>
+            <rect x="16" y="10" width="5.5" height="4"/>
+            <rect x="16" y="17" width="5.5" height="4"/>
+            <path d="M8.5 12L16 5"/>
+            <path d="M8.5 12h7.5"/>
+            <path d="M8.5 12L16 19"/>
+          </svg>
+        </span>
+        <span class="viv-rail-link-label">Investigations</span>
+      </a>
+      <!-- Studies: toggles the dockable Studies panel — the per-investigation study
+           browser (search / select / reorder), relocated out of the rail into a
+           panel that docks left / right / bottom / top (studies-panel.js, built on
+           panel-dock.js like the Chat / Code / Graph panels). NOT a .menu-link, so
+           page switches leave its open state alone. Opens by default when the
+           workspace has any studies. List-with-bullets icon. -->
+      <a href="#" id="viv-studies-toggle" class="viv-rail-link" role="button" aria-pressed="false" title="Studies browser">
+        <span class="viv-rail-link-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" class="viv-rail-link-svg">
+            <circle cx="4.5" cy="6"  r="1.2" fill="currentColor" stroke="none"/>
+            <path d="M9 6 H20"/>
+            <circle cx="4.5" cy="12" r="1.2" fill="currentColor" stroke="none"/>
+            <path d="M9 12 H20"/>
+            <circle cx="4.5" cy="18" r="1.2" fill="currentColor" stroke="none"/>
+            <path d="M9 18 H20"/>
+          </svg>
+        </span>
+        <span class="viv-rail-link-label">Studies</span>
       </a>
       <!-- Resources: the workspace's source material. A single tab with two
            sub-tabs — "Datasets & references" (the /api/inputs datasets,
@@ -990,7 +1034,7 @@ a.viv-bs-commit:hover { text-decoration: underline; }
             <circle cx="19" cy="10" r="1.05" fill="currentColor" stroke="none"/>
           </svg>
         </span>
-        <span class="viv-rail-link-label">Analysis</span>
+        <span class="viv-rail-link-label">Explore</span>
       </a>
       <!-- AI: toggles the docked chat panel on the right (docs/ai-chat.md). Not a page,
            and deliberately NOT a .menu-link (so page switches don't clear its state).
@@ -1020,25 +1064,6 @@ a.viv-bs-commit:hover { text-decoration: underline; }
         </span>
         <span class="viv-rail-link-label">Code</span>
       </a>
-      <!-- Studies: the investigations overview. The LAST rail item (moved to the
-           bottom of the menu), but still the DEFAULT landing view on workbench
-           load (the default page is 'investigations', set in walkthrough.js —
-           independent of this menu position). The per-investigation study list
-           lives in the search section below. Branching-fan (DAG) icon. -->
-      <a href="#investigations"    class="viv-rail-link menu-link" data-page="investigations">
-        <span class="viv-rail-link-icon">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" class="viv-rail-link-svg">
-            <rect x="2.5" y="9" width="6" height="6"/>
-            <rect x="16" y="3" width="5.5" height="4"/>
-            <rect x="16" y="10" width="5.5" height="4"/>
-            <rect x="16" y="17" width="5.5" height="4"/>
-            <path d="M8.5 12L16 5"/>
-            <path d="M8.5 12h7.5"/>
-            <path d="M8.5 12L16 19"/>
-          </svg>
-        </span>
-        <span class="viv-rail-link-label">Studies</span>
-      </a>
       <!-- The Branch page (#github) is no longer a rail item — it's reached by
            clicking the workspace source display at the top of the rail (see
            #viv-workspace-switcher). Hash route #github kept for back-compat. -->
@@ -1055,8 +1080,8 @@ a.viv-bs-commit:hover { text-decoration: underline; }
                autocomplete="off" spellcheck="false" aria-label="Search studies"
                oninput="window._filterRailStudies && window._filterRailStudies(this.value)"
                onkeydown="if(event.key==='Escape'){_vivToggleRailSearch(false);}"
-               style="width:calc(100% - 24px);margin:2px 12px 6px;padding:4px 8px;font-size:0.82em;
-                      color:#374151;border:1px solid #e5e7eb;border-radius:4px;background:#fff;box-sizing:border-box;" />
+               style="padding:2px 7px;font-size:0.78em;color:#374151;border:1px solid #e5e7eb;
+                      border-radius:4px;background:#fff;box-sizing:border-box;" />
       </div>
       <div id="viv-rail-investigations">
         <div class="viv-loading viv-loading-compact"><span class="viv-loading-spin" aria-hidden="true"></span><span>Loading…</span></div>
@@ -1159,7 +1184,7 @@ a.viv-bs-commit:hover { text-decoration: underline; }
           <li><strong>Studies</strong> — organize runs into investigations that pose a question and gate on an
             expected result.</li>
           <li><strong>Runs</strong> — every simulation you've launched, with its results and artifacts.</li>
-          <li><strong>Analysis</strong> — tools and viewers matched to what your runs produced.</li>
+          <li><strong>Explore</strong> — deeper interactive analysis &amp; visualization modules matched to what your runs produced.</li>
         </ul>
         <p class="about-fineprint">Tip: start on <strong>Catalog → Composites</strong>, open
           <code>ecoli_baseline</code> (or any composite), set <strong>Steps</strong>, and hit <strong>▶ Run</strong>.</p>
@@ -1431,7 +1456,7 @@ a.viv-bs-commit:hover { text-decoration: underline; }
   </div>
 
   <div id="iset-workspace" style="display:none">
-    <div class="inv-header-bar" style="display:flex;align-items:center;flex-wrap:wrap;gap:8px 12px;margin:0 0 10px">
+    <div class="inv-header-bar" style="display:flex;align-items:center;flex-wrap:wrap;gap:5px 7px;margin:0 0 10px">
       
       <span id="ws-title-wrap" style="display:flex;flex-direction:column;justify-content:center;min-width:0;flex:1 1 auto;line-height:1.15">
         <span id="ws-title-kicker" style="font-size:0.68em;font-weight:600;letter-spacing:0.07em;text-transform:uppercase;color:#94a3b8">Investigation</span>
@@ -1441,9 +1466,11 @@ a.viv-bs-commit:hover { text-decoration: underline; }
       <span id="aig-needs-attention-chip" class="aig-na-chip-host"></span>
       
       <span class="inv-header-nav" style="display:inline-flex;align-items:center;flex-wrap:wrap;gap:6px;margin-left:auto">
-        <button id="ws-back" class="btn-mini" onclick="_showExplore()">← All investigations</button>
+        <button id="ws-back" class="btn-mini" onclick="_showExplore()"
+                title="All investigations" aria-label="All investigations">←</button>
         <button type="button" id="inv-overview-toggle" class="btn-mini" aria-expanded="false"
-                onclick="window._toggleInvOverview()">▸ Overview</button>
+                title="Overview" aria-label="Toggle overview"
+                onclick="window._toggleInvOverview()">▸</button>
         <span id="ws-actions"></span>
       </span>
     </div>
@@ -1591,8 +1618,7 @@ a.viv-bs-commit:hover { text-decoration: underline; }
         <button type="button" title="Back to the investigation graph (exit the study)" aria-label="Back to the investigation graph" onclick="window._aigExitToGraph()">⛶</button>
       </span>
       
-      <span id="aig-layout-group" class="aig-tb-group" role="group" aria-label="Graph orientation">
-        <span class="aig-tb-label">Layout</span>
+      <span id="aig-layout-group" class="aig-tb-group" role="group" aria-label="Graph orientation" title="Layout">
         
         <span class="aig-tb-seg">
           <button id="aig-orient-lr" type="button" title="Left → right" aria-label="Left to right"
@@ -1606,8 +1632,7 @@ a.viv-bs-commit:hover { text-decoration: underline; }
            right — it drives semantic detail AND view zoom together. The fine-
            grained Detail / Width / view-Zoom sliders live in the ⚙ Display
            popover (kept in sync by _aigSyncZoomUI). -->
-      <span class="aig-tb-group">
-        <label class="aig-tb-label" for="aig-unified-zoom">Zoom</label>
+      <span class="aig-tb-group" title="Zoom">
         <input id="aig-unified-zoom" class="aig-tb-slider aig-tb-slider-wide" type="range"
                min="0" max="100" step="1" value="50"
                oninput="window._setAigUnifiedZoom(parseInt(this.value,10), true)"
@@ -1618,10 +1643,9 @@ a.viv-bs-commit:hover { text-decoration: underline; }
         <button id="aig-fill-btn" type="button" class="aig-tb-btn"
                 title="Fill to screen — fit the whole investigation graph to the view and centre it"
                 aria-label="Fill the investigation graph to the screen"
-                onclick="window._aigFillToScreen&&window._aigFillToScreen()">&#10530; Fit</button>
+                onclick="window._aigFillToScreen&&window._aigFillToScreen()">&#10530;</button>
       </span>
-      <span class="aig-tb-group aig-settings-ctl" style="position:relative">
-        <span class="aig-tb-label">Display</span>
+      <span class="aig-tb-group aig-settings-ctl" style="position:relative" title="Display">
         <button id="aig-settings-btn" type="button" class="aig-tb-btn" aria-haspopup="true" aria-expanded="false"
                 title="Display settings — fine-tune detail, card width, and zoom"
                 aria-label="Display settings" onclick="window._aigToggleSettings(event)">⚙</button>
@@ -1651,14 +1675,12 @@ a.viv-bs-commit:hover { text-decoration: underline; }
         </div>
       </span>
       
-      <span class="aig-tb-group dag-legend-wrap" style="position:relative">
-        <span class="aig-tb-label">Legend</span>
+      <span class="aig-tb-group dag-legend-wrap" style="position:relative" title="Legend">
         <button id="dag-legend-chip" type="button" class="aig-tb-btn" aria-haspopup="true" aria-expanded="false"
                 aria-label="Legend" title="Legend — node Progress/Verdict markers and edge types">?</button>
         <div id="dag-legend-popover" role="dialog" aria-label="Investigation graph legend" style="display:none;position:absolute;right:0;top:100%;margin-top:6px;background:#fff;border:1px solid #e2e8f0;border-radius:8px;box-shadow:0 6px 20px rgba(0,0,0,0.14);z-index:70;min-width:240px;max-width:360px;padding:10px 12px;text-align:left"></div>
       </span>
-      <span class="aig-tb-group aig-dl-ctl" style="position:relative">
-        <span class="aig-tb-label">Export</span>
+      <span class="aig-tb-group aig-dl-ctl" style="position:relative" title="Export">
         <button id="aig-dl-btn" type="button" class="aig-tb-btn" title="Download the investigation graph as an image (PNG) or PDF"
                 aria-label="Export graph" aria-haspopup="true" aria-expanded="false" onclick="window._aigToggleDownloadMenu(event)">⬇</button>
         <div id="aig-dl-menu" role="menu" style="display:none;position:absolute;right:0;top:100%;margin-top:4px;background:#fff;border:1px solid #e2e8f0;border-radius:6px;box-shadow:0 4px 16px rgba(0,0,0,0.14);z-index:70;min-width:132px;overflow:hidden">
@@ -1669,8 +1691,7 @@ a.viv-bs-commit:hover { text-decoration: underline; }
       <!-- Dock control: choose a side (left/right/bottom/top), pop out, or go back
            inline. Placed after the Display/Legend/Export trio so those three stay
            grouped together. -->
-      <span class="aig-tb-group" role="group" aria-label="Graph panel">
-        <span class="aig-tb-label">Dock</span>
+      <span class="aig-tb-group" role="group" aria-label="Graph panel" title="Dock">
         <button id="aig-dock-panel-btn" type="button" class="aig-tb-btn"
                 title="Dock the investigation graph — choose a side, pop out, or go back inline"
                 aria-haspopup="menu" aria-label="Dock the investigation graph"
@@ -2350,6 +2371,40 @@ a.viv-bs-commit:hover { text-decoration: underline; }
     </div>
   </aside>
 
+  <!-- Dockable Studies panel. The per-investigation study browser
+       (#viv-rail-studies-section — search + the dependency-ordered study tree)
+       is RELOCATED into #viv-studies-body by studies-panel.js and shown through
+       this panel. Built on VivPanelDock exactly like the Chat / Code / Graph
+       panels — docks left / right / bottom / top, resizes, pops out. Opens by
+       default when the workspace has studies; toggled from the rail "Studies" tab. -->
+  <aside id="viv-studies-panel" class="viv-studies-panel" aria-label="Studies" hidden>
+    <div class="viv-studies-panel-inner">
+      <div class="viv-studies-resize-handle" id="viv-studies-resize-handle"
+           role="separator" aria-orientation="vertical" aria-label="Resize studies panel"
+           title="Drag to resize"></div>
+      <!-- A thin drag-to-dock strip carrying only the move / close controls (no
+           "Studies" title banner — the rail tab already names it). The icon
+           controls mirror the Code / Chat panel header (.vp-head / .vp-icon). -->
+      <div class="viv-studies-head vp-head" title="Drag to dock left / right / bottom / top">
+        <span class="vp-spacer"></span>
+        <button class="vp-icon" type="button" data-act="dock" title="Move or pop out panel" aria-label="Move or pop out panel"
+                onclick="window.StudiesPanel&&StudiesPanel.dockMenu(this)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M9 4v16"/></svg>
+        </button>
+        <button class="vp-icon" type="button" title="Close" aria-label="Close studies panel"
+                onclick="window.StudiesPanel&&StudiesPanel.toggle()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+        </button>
+      </div>
+      <!-- Expand handle: the only thing visible when the panel is collapsed to a
+           thin edge strip (CSS .vp-collapsed). Click it to expand. -->
+      <button type="button" class="viv-studies-expand" title="Expand the studies panel"
+              aria-label="Expand the studies panel"
+              onclick="window.StudiesPanel&&StudiesPanel.expand()">⟩</button>
+      <div class="viv-studies-body" id="viv-studies-body"></div>
+    </div>
+  </aside>
+
 </div> <!-- /.viv-layout -->
 
 <!-- ============================================================ -->
@@ -2675,7 +2730,7 @@ Nothing on <code id="pr-base-display-2">main</code> changes until someone presse
      DataSource global that renderers call to fetch narrative data.
      local-server mode (default) fetches from the same-origin /api/* endpoints.
      Hosted mode (sub-projects #2/#3) will set a different config here. -->
-<script>window.__DASH_CONFIG__ = { mode: "snapshot", basePath: "/viva-dynamic-networks/dashboard", provenance: {"commit": "ffd6076d1492cdc25499aae8d7da2193c21a5e74", "branch": "main", "lockfile": "uv.lock@2ae0fa4776a6", "generated_at": "2026-10-22 13:20 UTC"} };</script>
+<script>window.__DASH_CONFIG__ = { mode: "snapshot", interactiveUrl: "https://github.com/vivarium-collective/viva-dynamic-networks", basePath: "/viva-dynamic-networks/dashboard", inputsDownloadBase: "https://github.com/vivarium-collective/viva-dynamic-networks/raw/dynamic-networks", provenance: {"repo_slug": "vivarium-collective/viva-dynamic-networks", "repo_url": "https://github.com/vivarium-collective/viva-dynamic-networks", "commit": "5cd2c02eb59167b34fc4703106aa60d8630654b5", "commit_url": "https://github.com/vivarium-collective/viva-dynamic-networks/commit/5cd2c02eb59167b34fc4703106aa60d8630654b5", "branch": "dynamic-networks", "lockfile": "uv.lock@ebf9501f3d2a", "generated_at": "2026-10-22 22:33 UTC"} };</script>
 <!-- Derive the global URL prefix from the (possibly publish-injected) config.
      Many renderers prefix workspace-root-absolute links (/studies/, /api/)
      with window.__BASE_PATH__ so they resolve when the read-only bundle is
@@ -2717,6 +2772,10 @@ Nothing on <code id="pr-base-display-2">main</code> changes until someone presse
 <!-- graph-panel.js: the dockable investigation-graph panel (VivPanelDock). Loads
      AFTER panel-dock.js (the engine) and walkthrough.js (the DAG renderer it hosts). -->
 <script src="/viva-dynamic-networks/dashboard/assets/graph-panel.js" onerror="/* graph panel unavailable */"></script>
+<!-- studies-panel.js: the dockable Studies-browser panel (VivPanelDock). Loads
+     AFTER panel-dock.js (the engine) and walkthrough.js (which renders the study
+     tree it hosts). -->
+<script src="/viva-dynamic-networks/dashboard/assets/studies-panel.js" onerror="/* studies panel unavailable */"></script>
 <script src="/viva-dynamic-networks/dashboard/assets/mobile-nav.js" onerror="/* mobile-nav unavailable */"></script>
 <script src="/viva-dynamic-networks/dashboard/assets/search-palette.js" onerror="/* global search unavailable */"></script>
 <script src="/viva-dynamic-networks/dashboard/assets/github-login.js" onerror="/* github-login unavailable */"></script>
