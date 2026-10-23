@@ -864,15 +864,17 @@ a.viv-bs-commit:hover { text-decoration: underline; }
            dropdown and the standalone Branch rail item. -->
       <div class="viv-wsp-trigger" id="viv-workspace-picker-trigger" role="button" tabindex="0"
            title="Switch workspace — pick from your workspaces">
-        <span class="viv-ws-avatar viv-ws-avatar-mono"
+        <span class="viv-ws-avatar"
               data-ws-name="dynamic-networks" aria-hidden="true">
-          
+          <img class="viv-ws-avatar-img" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCIgcm9sZT0iaW1nIiBhcmlhLWxhYmVsPSJkeW5hbWljIG5ldHdvcmtzIj4KICA8ZGVmcz4KICAgIDxsaW5lYXJHcmFkaWVudCBpZD0iYmciIHgxPSIwIiB5MT0iMCIgeDI9IjEiIHkyPSIxIj4KICAgICAgPHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjNGY0NmU1Ii8+CiAgICAgIDxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iIzdjM2FlZCIvPgogICAgPC9saW5lYXJHcmFkaWVudD4KICA8L2RlZnM+CiAgPHJlY3Qgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiByeD0iMTQiIGZpbGw9InVybCgjYmcpIi8+CiAgPGcgc3Ryb2tlPSIjYzdkMmZlIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgb3BhY2l0eT0iMC44NSI+CiAgICA8bGluZSB4MT0iMTgiIHkxPSIyMCIgeDI9IjQwIiB5Mj0iMTUiLz4KICAgIDxsaW5lIHgxPSI0MCIgeTE9IjE1IiB4Mj0iNDkiIHkyPSIzMyIvPgogICAgPGxpbmUgeDE9IjE4IiB5MT0iMjAiIHgyPSIzMSIgeTI9IjM5Ii8+CiAgICA8bGluZSB4MT0iNDkiIHkxPSIzMyIgeDI9IjMxIiB5Mj0iMzkiLz4KICAgIDxsaW5lIHgxPSIzMSIgeTE9IjM5IiB4Mj0iMTkiIHkyPSI0NiIvPgogICAgPGxpbmUgeDE9IjMxIiB5MT0iMzkiIHgyPSI0NSIgeTI9IjUxIi8+CiAgICA8bGluZSB4MT0iNDkiIHkxPSIzMyIgeDI9IjQ1IiB5Mj0iNTEiLz4KICAgIDxsaW5lIHgxPSIxOCIgeTE9IjIwIiB4Mj0iMTkiIHkyPSI0NiIvPgogIDwvZz4KICA8Zz4KICAgIDxjaXJjbGUgY3g9IjE4IiBjeT0iMjAiIHI9IjUiIGZpbGw9IiNmZmZmZmYiLz4KICAgIDxjaXJjbGUgY3g9IjQwIiBjeT0iMTUiIHI9IjYiIGZpbGw9IiNmYmJmMjQiLz4KICAgIDxjaXJjbGUgY3g9IjQ5IiBjeT0iMzMiIHI9IjUiIGZpbGw9IiNmZmZmZmYiLz4KICAgIDxjaXJjbGUgY3g9IjMxIiBjeT0iMzkiIHI9IjYuNSIgZmlsbD0iI2ZmZmZmZiIvPgogICAgPGNpcmNsZSBjeD0iMTkiIGN5PSI0NiIgcj0iNC41IiBmaWxsPSIjZmZmZmZmIi8+CiAgICA8Y2lyY2xlIGN4PSI0NSIgY3k9IjUxIiByPSI1LjUiIGZpbGw9IiMzNGQzOTkiLz4KICA8L2c+Cjwvc3ZnPgo=" alt="" loading="lazy"
+               onerror="this.remove(); this.parentNode.classList.add('viv-ws-avatar-mono');">
           <span class="viv-ws-mono"></span>
           <span class="viv-wsp-dot viv-wsp-ready" title="workspace loaded">●</span>
         </span>
         <span class="viv-wsp-trigger-current">
           <span class="viv-wsp-trigger-names">
-            <strong>dynamic-networks</strong>
+            <strong><a class="viv-ws-home-link" href="https://github.com/vivarium-collective/viva-dynamic-networks" target="_blank" rel="noopener"
+                 title="Open dynamic-networks home" onclick="event.stopPropagation()">dynamic-networks</a></strong>
             <span class="viv-wsp-trigger-branch" title="branch: dynamic-networks">dynamic-networks</span>
           </span>
         </span>
@@ -881,7 +883,7 @@ a.viv-bs-commit:hover { text-decoration: underline; }
                 title="Open Source — repository · branch · commit" aria-label="Open Source page">↗</button>
         <!-- Shown only when the rail is collapsed: a hover flyout naming the workspace. -->
         <span class="viv-ws-flyout" aria-hidden="true">
-          <strong>dynamic-networks</strong>
+          <strong><a class="viv-ws-home-link" href="https://github.com/vivarium-collective/viva-dynamic-networks" target="_blank" rel="noopener" onclick="event.stopPropagation()">dynamic-networks</a></strong>
           <span class="viv-ws-flyout-branch">dynamic-networks</span>
           <span class="viv-ws-flyout-hint">click to switch workspace</span>
         </span>
@@ -2773,7 +2775,7 @@ Nothing on <code id="pr-base-display-2">main</code> changes until someone presse
      DataSource global that renderers call to fetch narrative data.
      local-server mode (default) fetches from the same-origin /api/* endpoints.
      Hosted mode (sub-projects #2/#3) will set a different config here. -->
-<script>window.__DASH_CONFIG__ = { mode: "snapshot", interactiveUrl: "https://github.com/vivarium-collective/viva-dynamic-networks", basePath: "/viva-dynamic-networks/workbench", inputsDownloadBase: "https://github.com/vivarium-collective/viva-dynamic-networks/raw/dynamic-networks", provenance: {"repo_slug": "vivarium-collective/viva-dynamic-networks", "repo_url": "https://github.com/vivarium-collective/viva-dynamic-networks", "commit": "8182945db741caf2d1194f51b33ac7f7e671979a", "commit_url": "https://github.com/vivarium-collective/viva-dynamic-networks/commit/8182945db741caf2d1194f51b33ac7f7e671979a", "branch": "dynamic-networks", "lockfile": "uv.lock@2ae0fa4776a6", "generated_at": "2026-10-23 00:51 UTC"} };</script>
+<script>window.__DASH_CONFIG__ = { mode: "snapshot", interactiveUrl: "https://github.com/vivarium-collective/viva-dynamic-networks", basePath: "/viva-dynamic-networks/workbench", inputsDownloadBase: "https://github.com/vivarium-collective/viva-dynamic-networks/raw/dynamic-networks", provenance: {"repo_slug": "vivarium-collective/viva-dynamic-networks", "repo_url": "https://github.com/vivarium-collective/viva-dynamic-networks", "commit": "8182945db741caf2d1194f51b33ac7f7e671979a", "commit_url": "https://github.com/vivarium-collective/viva-dynamic-networks/commit/8182945db741caf2d1194f51b33ac7f7e671979a", "branch": "dynamic-networks", "lockfile": "uv.lock@2ae0fa4776a6", "generated_at": "2026-10-23 00:55 UTC"} };</script>
 <!-- Derive the global URL prefix from the (possibly publish-injected) config.
      Many renderers prefix workspace-root-absolute links (/studies/, /api/)
      with window.__BASE_PATH__ so they resolve when the read-only bundle is
