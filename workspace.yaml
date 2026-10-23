@@ -1,5 +1,8 @@
 schema_version: 2
 name: dynamic-networks
+# Rail avatar (shown next to the name, incl. the collapsed rail). A workspace-
+# relative image path is inlined by the workbench; omit for a name monogram.
+avatar: workspace/reports/dynamic-networks-icon.svg
 created: "2026-10-22"
 plugin_version: 0.4.16
 package_path: viva_dynamic_networks
