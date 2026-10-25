@@ -1225,7 +1225,7 @@ cites:   ["gross2008adaptive"]</pre>
 </section>
 
 </main>
-<script>window.__DASH_CONFIG__ = { mode: "snapshot", interactiveUrl: "https://github.com/vivarium-collective/viva-dynamic-networks", basePath: "/viva-dynamic-networks/workbench", inputsDownloadBase: "https://github.com/vivarium-collective/viva-dynamic-networks/raw/main", provenance: {"repo_slug": "vivarium-collective/viva-dynamic-networks", "repo_url": "https://github.com/vivarium-collective/viva-dynamic-networks", "commit": "8182945db741caf2d1194f51b33ac7f7e671979a", "commit_url": "https://github.com/vivarium-collective/viva-dynamic-networks/commit/8182945db741caf2d1194f51b33ac7f7e671979a", "branch": "main", "lockfile": "uv.lock@2ae0fa4776a6", "generated_at": "2026-10-24 16:57 UTC"} };</script>
+<script>window.__DASH_CONFIG__ = { mode: "snapshot", interactiveUrl: "https://github.com/vivarium-collective/viva-dynamic-networks", basePath: "/viva-dynamic-networks/workbench", inputsDownloadBase: "https://github.com/vivarium-collective/viva-dynamic-networks/raw/main", provenance: {"repo_slug": "vivarium-collective/viva-dynamic-networks", "repo_url": "https://github.com/vivarium-collective/viva-dynamic-networks", "commit": "8182945db741caf2d1194f51b33ac7f7e671979a", "commit_url": "https://github.com/vivarium-collective/viva-dynamic-networks/commit/8182945db741caf2d1194f51b33ac7f7e671979a", "branch": "main", "lockfile": "uv.lock@2ae0fa4776a6", "generated_at": "2026-10-25 18:56 UTC"} };</script>
 <script src="/viva-dynamic-networks/workbench/assets/data-source.js"></script>
 <script src="/viva-dynamic-networks/workbench/assets/toast.js"></script>
 <script>
@@ -1383,6 +1383,13 @@ window._seedFollowupProposal = _seedFollowupProposal;
   // run buttons in a published read-only snapshot (reproducible-rerun-spine
   // Task 4 / G2: both equally inert with no live backend to launch against).
   if (window.__DASH_CONFIG__ && window.__DASH_CONFIG__.mode === "snapshot") {
+    // The study-detail shell does NOT load walkthrough.js (which sets this on
+    // the main SPA), so set body.snapshot here. Without it every snapshot check
+    // on this page reads false — most visibly the inline bigraph-loom embed,
+    // which then mounts in LIVE mode (?id=&live=1) and hangs forever fetching
+    // /api/composite-state?ref=… against a backend the static bundle doesn't
+    // have, instead of the baked static /api/composite-state/<id>.json.
+    document.body.classList.add("snapshot");
     var reproduceBtn = document.getElementById("study-reproduce");
     if (reproduceBtn) reproduceBtn.style.display = "none";
     var runCurrentBtn = document.getElementById("study-run-current-spec");
