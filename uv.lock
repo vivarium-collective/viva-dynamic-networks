@@ -651,7 +651,7 @@ requires-dist = [
     { name = "pyyaml", specifier = ">=6.0" },
     { name = "rich", marker = "extra == 'cli'" },
     { name = "typer", marker = "extra == 'cli'" },
-    { name = "viva-copasi", editable = "../viva-copasi" },
+    { name = "viva-copasi", git = "https://github.com/vivarium-collective/viva-copasi.git?branch=main" },
     { name = "vivarium-workbench", git = "https://github.com/vivarium-collective/vivarium-workbench.git?branch=main" },
 ]
 provides-extras = ["dev", "cli"]
@@ -3159,8 +3159,8 @@ source = { git = "https://github.com/vivarium-collective/viva-marketplace.git?re
 
 [[package]]
 name = "viva-copasi"
-version = "0.1.0"
-source = { editable = "../viva-copasi" }
+version = "0.1.2"
+source = { git = "https://github.com/vivarium-collective/viva-copasi.git?branch=main#cf878221cf98ec18d1c700808ff074f6b00760da" }
 dependencies = [
     { name = "bigraph-schema" },
     { name = "copasi-basico" },
@@ -3169,20 +3169,6 @@ dependencies = [
     { name = "pyyaml" },
     { name = "viva-superpowers" },
 ]
-
-[package.metadata]
-requires-dist = [
-    { name = "bigraph-schema" },
-    { name = "bigraph-viz", marker = "extra == 'dev'" },
-    { name = "copasi-basico" },
-    { name = "matplotlib", marker = "extra == 'dev'" },
-    { name = "process-bigraph", specifier = ">=0.0.10" },
-    { name = "pytest", marker = "extra == 'dev'" },
-    { name = "python-copasi" },
-    { name = "pyyaml" },
-    { name = "viva-superpowers", git = "https://github.com/vivarium-collective/viva-superpowers.git?branch=main" },
-]
-provides-extras = ["dev"]
 
 [[package]]
 name = "viva-emitters"
