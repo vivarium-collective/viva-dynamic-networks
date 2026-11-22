@@ -3232,7 +3232,7 @@ evaluator = [
 [[package]]
 name = "viva-workspace"
 version = "0.1.0"
-source = { git = "https://github.com/vivarium-collective/viva:workspace.git?branch=main#cbd316a95f0c7e28eb0287176a5e10e327cde36f" }
+source = { git = "https://github.com/vivarium-collective/viva-workspace.git?branch=main#cbd316a95f0c7e28eb0287176a5e10e327cde36f" }
 dependencies = [
     { name = "jsonschema" },
     { name = "pyyaml" },
